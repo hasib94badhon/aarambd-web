@@ -31,7 +31,7 @@ export default function EditProfile({ phone, initialName, initialDescription, in
 
   useEffect(() => {
     api
-      .get("/category/get_categories_name")
+      .get("/get_categories_name")
       .then((r) => setCategories(r.data.categories ?? []))
       .catch(() => {});
   }, []);

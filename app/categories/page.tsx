@@ -106,7 +106,7 @@ export default function CategoriesPage() {
 
   useEffect(() => {
     publicApi
-      .get("/category/get_categories_name")
+      .get("/get_categories_name")
       .then((r) => {
         setCategories(r.data.categories ?? []);
         setFiltered(r.data.categories ?? []);

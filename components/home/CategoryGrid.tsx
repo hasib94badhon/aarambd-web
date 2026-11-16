@@ -59,7 +59,7 @@ export default function CategoryGrid() {
 
   useEffect(() => {
     publicApi
-      .get("/category/get_categories_name")
+      .get("/get_categories_name")
       .then((r: { data: { categories?: Category[] } }) => setCategories(r.data.categories?.slice(0, 12) ?? []))
       .catch(() => {})
       .finally(() => setLoading(false));

@@ -49,7 +49,7 @@ function Feed() {
   // Load categories once
   useEffect(() => {
     api
-      .get("/category/get_categories_name")
+      .get("/get_categories_name")
       .then((r) => setCategories(r.data.categories ?? []))
       .catch(() => {});
   }, []);

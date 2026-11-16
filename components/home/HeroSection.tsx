@@ -1,20 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, Star, Phone, CheckCircle2, ArrowRight, Shield, Zap } from "lucide-react";
+import { Search, MapPin, Phone, CheckCircle2, ArrowRight, Shield, Zap } from "lucide-react";
+import { publicApi } from "@/lib/api";
 
 const POPULAR = ["Plumber", "Electrician", "Restaurant", "Doctor", "Lawyer", "Contractor", "Tailor", "Tutor"];
 
-const SAMPLE_CARDS = [
-  { name: "Rahman Electronics", cat: "Electronics", rating: 4.8, location: "Dhaka",     calls: 142, emoji: "📱" },
-  { name: "City Plumbing Co.",  cat: "Plumbing",    rating: 4.6, location: "Chittagong", calls: 87,  emoji: "🔧" },
-  { name: "Green Cuisine",      cat: "Restaurant",  rating: 4.9, location: "Sylhet",     calls: 203, emoji: "🍽️" },
-];
+interface TopUser {
+  user_id: number;
+  name: string;
+  cat_name?: string;
+  location?: string;
+  user_called?: number;
+  type?: "paid" | string | null;
+  service_id?: number;
+  shop_id?: number;
+  is_service?: boolean | null;
+}
+
+interface PlatformStats {
+  total_businesses: number;
+  total_posts: number;
+}
 
 export default function HeroSection() {
   const [query, setQuery] = useState("");
+  const [topUsers, setTopUsers] = useState<TopUser[]>([]);
+  const [stats, setStats] = useState<PlatformStats | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    publicApi
+      .get("/get_most_viewed_users")
+      .then((r: { data: { user_viewed_users?: TopUser[] } }) => {
+        const consumerFacing = (r.data.user_viewed_users ?? []).filter(
+          (u) => !u.cat_name?.toLowerCase().includes("data collector")
+        );
+        setTopUsers(consumerFacing.slice(0, 3));
+      })
+      .catch(() => {});
+
+    publicApi
+      .get("/get_platform_stats")
+      .then((r: { data: PlatformStats }) => setStats(r.data))
+      .catch(() => {});
+  }, []);
 
   const handleSearch = (e: { preventDefault(): void }) => {
     e.preventDefault();
@@ -46,7 +77,7 @@ export default function HeroSection() {
           <div>
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold mb-7 animate-fade-in animation-fill-both">
               <MapPin size={12} className="text-cyan-300" />
-              Bangladesh&apos;s #1 Local Discovery Platform
+              Bangladesh&apos;s Local Discovery Platform
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight mb-5 animate-fade-in-up animation-fill-both">
@@ -67,20 +98,20 @@ export default function HeroSection() {
             {/* Search */}
             <form
               onSubmit={handleSearch}
-              className="flex gap-2 max-w-xl animate-fade-in-up animation-delay-200 animation-fill-both"
+              className="flex flex-col sm:flex-row gap-2 max-w-xl animate-fade-in-up animation-delay-200 animation-fill-both"
             >
-              <div className="relative flex-1">
+              <div className="relative flex-1 min-w-0">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={17} />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search businesses, services, categories…"
-                  className="w-full pl-11 pr-4 py-3.5 text-slate-900 bg-white border-0 rounded-xl shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 text-sm font-medium placeholder:text-slate-400"
+                  className="w-full min-w-0 pl-11 pr-4 py-3.5 text-slate-900 bg-white border-0 rounded-xl shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 text-sm font-medium placeholder:text-slate-400"
                 />
               </div>
               <button
                 type="submit"
-                className="py-3.5 px-6 bg-blue-500 hover:bg-blue-400 active:bg-blue-600 text-white font-semibold rounded-xl shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-blue-500/30 flex items-center gap-1.5 whitespace-nowrap text-sm"
+                className="py-3.5 px-6 bg-blue-500 hover:bg-blue-400 active:bg-blue-600 text-white font-semibold rounded-xl shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-blue-500/30 flex items-center justify-center gap-1.5 whitespace-nowrap text-sm w-full sm:w-auto"
               >
                 Search <ArrowRight size={15} />
               </button>
@@ -114,63 +145,67 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right — floating cards */}
+          {/* Right — real top businesses */}
           <div className="hidden lg:flex flex-col gap-3 animate-fade-in animation-delay-200 animation-fill-both">
-            {SAMPLE_CARDS.map((card, i) => (
-              <div
-                key={card.name}
-                className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/15 transition-all group cursor-default"
-                style={{ transform: `translateX(${i % 2 === 1 ? "2rem" : "0"})` }}
-              >
-                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-105 transition-transform">
-                  {card.emoji}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-bold text-white text-sm truncate">{card.name}</p>
-                    <CheckCircle2 size={12} className="text-cyan-300 flex-shrink-0" />
+            {topUsers.map((u, i) => {
+              const href = u.is_service
+                ? `/service/${u.service_id}`
+                : u.is_service === false
+                ? `/shop/${u.shop_id}`
+                : `/profile/${u.user_id}`;
+              return (
+                <button
+                  key={u.user_id}
+                  onClick={() => router.push(href)}
+                  className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/15 transition-all group text-left"
+                  style={{ transform: `translateX(${i % 2 === 1 ? "2rem" : "0"})` }}
+                >
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-lg font-bold flex-shrink-0 group-hover:scale-105 transition-transform">
+                    {u.name?.charAt(0).toUpperCase() ?? "?"}
                   </div>
-                  <p className="text-xs text-blue-200 mt-0.5">{card.cat} · {card.location}</p>
-                  <div className="flex items-center gap-3 mt-1.5">
-                    <span className="flex items-center gap-0.5 text-xs text-yellow-300 font-semibold">
-                      <Star size={10} fill="currentColor" /> {card.rating}
-                    </span>
-                    <span className="flex items-center gap-0.5 text-xs text-blue-200">
-                      <Phone size={10} /> {card.calls} calls
-                    </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-white text-sm truncate">{u.name}</p>
+                      {u.type === "paid" && (
+                        <CheckCircle2 size={12} className="text-cyan-300 flex-shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-xs text-blue-200 mt-0.5 truncate">
+                      {u.cat_name ?? "Business"}
+                      {u.location ? ` · ${u.location}` : ""}
+                    </p>
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <span className="flex items-center gap-0.5 text-xs text-blue-200">
+                        <Phone size={10} /> {u.user_called ?? 0} {(u.user_called ?? 0) === 1 ? "call" : "calls"}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <span className="text-[11px] text-emerald-300 font-semibold bg-emerald-400/10 border border-emerald-400/20 rounded-lg px-2 py-1">
-                  Open
-                </span>
-              </div>
-            ))}
+                  {u.type === "paid" && (
+                    <span className="text-[11px] text-emerald-300 font-semibold bg-emerald-400/10 border border-emerald-400/20 rounded-lg px-2 py-1 flex-shrink-0">
+                      Verified
+                    </span>
+                  )}
+                </button>
+              );
+            })}
 
-            {/* Trust badge */}
-            <div className="mt-1 flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl px-5 py-4 hover:bg-white/15 transition-all">
-              <div className="flex -space-x-2.5">
-                {["🧑", "👩", "👨", "🧕"].map((a, i) => (
-                  <span
-                    key={i}
-                    className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-white/40 flex items-center justify-center text-base"
-                  >
-                    {a}
-                  </span>
-                ))}
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-bold text-white">50,000+ active users</p>
-                <p className="text-xs text-blue-200 mt-0.5">across all 64 districts</p>
-              </div>
-              <div className="text-right">
-                <div className="flex justify-end">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} size={11} className="text-yellow-300" fill="currentColor" />
-                  ))}
+            {/* Trust badge — real platform totals */}
+            {stats && (
+              <div className="mt-1 flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl px-5 py-4 hover:bg-white/15 transition-all">
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-white">
+                    {stats.total_businesses.toLocaleString("en-US")}+ registered businesses
+                  </p>
+                  <p className="text-xs text-blue-200 mt-0.5">across Bangladesh</p>
                 </div>
-                <p className="text-[10px] text-blue-200 mt-0.5">4.8 / 5 rating</p>
+                <div className="text-right">
+                  <p className="text-sm font-bold text-white">
+                    {stats.total_posts.toLocaleString("en-US")}+
+                  </p>
+                  <p className="text-[10px] text-blue-200 mt-0.5">updates shared</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
