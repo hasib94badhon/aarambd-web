@@ -25,11 +25,11 @@ export default function PostCard({ post, onClick }: Props) {
         <img
           src={post.photo}
           alt={post.photo_description || "post image"}
-          className="w-full h-48 object-cover group-hover:brightness-95 transition"
+          className="w-full h-64 sm:h-72 object-cover group-hover:brightness-95 transition"
           loading="lazy"
         />
       ) : (
-        <div className="w-full h-32 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center">
+        <div className="w-full h-40 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center">
           <span className="text-4xl opacity-40">📝</span>
         </div>
       )}
@@ -49,7 +49,7 @@ export default function PostCard({ post, onClick }: Props) {
             <Link
               href={`/profile/${post.user_id}`}
               onClick={(e) => e.stopPropagation()}
-              className="text-sm font-semibold text-gray-800 hover:text-blue-600 transition truncate block"
+              className="text-sm font-semibold text-gray-800 hover:text-[#6C78DF] transition truncate block"
             >
               {post.name}
             </Link>

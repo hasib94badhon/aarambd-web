@@ -129,7 +129,7 @@ export default function CenterFeed({
             onClick={() => (isLoggedIn ? setComposerOpen(true) : router.push("/login"))}
             className="w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg hover:bg-slate-50 transition"
           >
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8990E8] to-[#30337A] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
               {isLoggedIn && user ? user.name?.charAt(0).toUpperCase() ?? "?" : <User size={16} />}
             </div>
             <span className="flex-1 text-sm text-slate-400 bg-slate-50 rounded-full px-4 py-2.5">
@@ -214,29 +214,34 @@ function FeedCard({ thought, onOpen }: { thought: Thought; onOpen: () => void })
         {businessHref && (
           <Link
             href={businessHref}
-            className="flex-shrink-0 flex items-center gap-1 text-[11px] font-medium text-blue-600 bg-blue-50 border border-blue-100 rounded-full px-2.5 py-1 hover:bg-blue-100 transition"
+            className="flex-shrink-0 flex items-center gap-1 text-[11px] font-medium text-[#6C78DF] bg-[#6C78DF]/10 border border-[#6C78DF]/20 rounded-full px-2.5 py-1 hover:bg-[#6C78DF]/20 transition"
           >
             <Store size={11} /> {thought.cat_name}
           </Link>
         )}
       </div>
 
+      {/* Picture, big, on top */}
+      {thought.des_photo && (
+        <button onClick={onOpen} className="block w-full mt-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={thought.des_photo} alt="" className="w-full h-72 sm:h-96 object-cover" />
+        </button>
+      )}
+
+      {/* Text, below */}
       <button onClick={onOpen} className="block w-full text-left">
         <p className="px-4 pt-3 text-sm text-slate-800 leading-relaxed whitespace-pre-line line-clamp-5">
           {thought.des}
         </p>
-        {thought.des_photo && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={thought.des_photo} alt="" className="w-full max-h-96 object-cover mt-3" />
-        )}
       </button>
 
       <div className="flex items-center gap-4 px-4 py-3 text-xs text-slate-400 border-t border-slate-50 mt-3">
         <span className="flex items-center gap-1"><Eye size={13} /> {thought.des_view ?? 0}</span>
-        <button onClick={onOpen} className="flex items-center gap-1 hover:text-blue-600 transition">
+        <button onClick={onOpen} className="flex items-center gap-1 hover:text-[#6C78DF] transition">
           <MessageCircle size={13} /> {thought.des_com ?? 0} comments
         </button>
-        <button onClick={onOpen} className="ml-auto flex items-center gap-0.5 text-blue-600 font-medium hover:gap-1.5 transition-all">
+        <button onClick={onOpen} className="ml-auto flex items-center gap-0.5 text-[#6C78DF] font-medium hover:gap-1.5 transition-all">
           View <ChevronRight size={13} />
         </button>
       </div>

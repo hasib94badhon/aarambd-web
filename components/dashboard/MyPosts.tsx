@@ -125,31 +125,60 @@ function PostRow({
 
   return (
     <div id={`post-${post.post_id}`} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden scroll-mt-24">
-      <div className="flex gap-0 sm:gap-4">
-        {/* Thumbnail */}
-        {img ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={img} alt="post" className="w-24 sm:w-32 object-cover flex-shrink-0 hidden sm:block" />
-        ) : (
-          <div className="w-24 sm:w-32 bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center flex-shrink-0 hidden sm:flex">
-            <span className="text-3xl opacity-30">📝</span>
-          </div>
-        )}
+      {/* Picture, big, on top */}
+      {img ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={img} alt="post" className="w-full h-64 sm:h-80 object-cover" />
+      ) : (
+        <div className="w-full h-40 bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center">
+          <span className="text-4xl opacity-30">📝</span>
+        </div>
+      )}
 
-        {/* Content */}
-        <div className="flex-1 p-4 flex flex-col gap-2 min-w-0">
+      {/* Text, below */}
+      <div className="p-4 flex flex-col gap-2 min-w-0">
           {!editing ? (
             <>
               {post.main_description && (
-                <p className="font-semibold text-gray-900 text-sm leading-snug line-clamp-1">
+                <p className="font-semibold text-gray-900 text-sm leading-snug">
                   {post.main_description}
                 </p>
               )}
-              <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">{post.post_description}</p>
-              <div className="flex items-center gap-4 text-xs text-gray-400 mt-auto pt-2">
+              <p className="text-sm text-gray-600 leading-relaxed">{post.post_description}</p>
+              <div className="flex items-center gap-4 text-xs text-gray-400 pt-3 mt-1 border-t border-gray-50">
                 <span className="flex items-center gap-1"><Clock size={10} /> {timeShort}</span>
                 <span className="flex items-center gap-1"><Eye size={10} /> {post.post_viewed}</span>
                 <span className="flex items-center gap-1"><MessageCircle size={10} /> {post.post_comments}</span>
+                <button
+                  onClick={() => { setEditing(true); setSaveError(""); }}
+                  className="ml-auto flex items-center gap-1 text-gray-400 hover:text-[#6C78DF] transition"
+                  title="Edit post"
+                >
+                  <Pencil size={13} />
+                </button>
+                {!confirmDelete ? (
+                  <button
+                    onClick={() => setConfirmDelete(true)}
+                    className="flex items-center gap-1 text-gray-400 hover:text-red-500 transition"
+                    title="Delete post"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <button
+                      onClick={handleDelete}
+                      disabled={deleting}
+                      className="text-xs bg-red-500 hover:bg-red-600 text-white px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 disabled:opacity-60"
+                    >
+                      {deleting ? <Loader2 size={10} className="animate-spin" /> : null}
+                      Delete
+                    </button>
+                    <button onClick={() => setConfirmDelete(false)} className="text-gray-400 hover:text-gray-600">
+                      Cancel
+                    </button>
+                  </span>
+                )}
               </div>
             </>
           ) : (
@@ -217,43 +246,6 @@ function PostRow({
               </div>
             </div>
           )}
-        </div>
-
-        {/* Actions */}
-        {!editing && (
-          <div className="flex-shrink-0 flex flex-col items-center justify-center gap-2 pr-4">
-            <button
-              onClick={() => { setEditing(true); setSaveError(""); }}
-              className="p-2 text-gray-300 hover:text-[#6C78DF] transition rounded-lg"
-              title="Edit post"
-            >
-              <Pencil size={15} />
-            </button>
-            {!confirmDelete ? (
-              <button
-                onClick={() => setConfirmDelete(true)}
-                className="p-2 text-gray-300 hover:text-red-500 transition rounded-lg"
-                title="Delete post"
-              >
-                <Trash2 size={15} />
-              </button>
-            ) : (
-              <div className="flex flex-col gap-1 items-center">
-                <button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="text-xs bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 disabled:opacity-60"
-                >
-                  {deleting ? <Loader2 size={11} className="animate-spin" /> : null}
-                  Delete
-                </button>
-                <button onClick={() => setConfirmDelete(false)} className="text-xs text-gray-400 hover:text-gray-600">
-                  Cancel
-                </button>
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

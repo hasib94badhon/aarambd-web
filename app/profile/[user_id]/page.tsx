@@ -311,7 +311,7 @@ function PostCard({
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
       {img && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={img} alt="post" className="w-full h-44 object-cover" />
+        <img src={img} alt="post" className="w-full h-64 sm:h-72 object-cover" />
       )}
       <div className="p-4">
         <p className="text-sm text-gray-800 leading-relaxed line-clamp-4">
