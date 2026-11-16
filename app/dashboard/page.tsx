@@ -6,6 +6,8 @@ import { Loader2, PlusCircle, MessageCircle, UserCog, Settings2, BarChart2 } fro
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProfileHeader from "@/components/dashboard/ProfileHeader";
+import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import RightSidebar from "@/components/home/RightSidebar";
 import Gallery from "@/components/dashboard/Gallery";
 import MyPosts from "@/components/dashboard/MyPosts";
 import EditProfile from "@/components/dashboard/EditProfile";
@@ -86,6 +88,7 @@ function DashboardContent({ phone, userId }: { phone: string; userId: string }) 
   const [loadingMore, setLoadingMore] = useState(false);
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("create-post");
 
   const loadProfile = useCallback(async () => {
     try {
@@ -161,29 +164,41 @@ function DashboardContent({ phone, userId }: { phone: string; userId: string }) 
   if (loading) return <DashboardSkeleton />;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      {/* Profile header card */}
-      {profile && <ProfileHeader user={profile} />}
-
-      {/* Gallery */}
-      <Gallery posts={posts} />
-
-      {/* Posts */}
-      <div>
-        <h2 className="text-sm font-bold text-slate-900 mb-4">Posts</h2>
-        <MyPosts
-          posts={posts}
-          hasMore={hasMorePosts}
-          onLoadMore={loadMorePosts}
-          loadingMore={loadingMore}
-          onDeleted={handlePostDeleted}
-          onEdited={handlePostEdited}
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      <div className="flex gap-4 items-start">
+        <DashboardSidebar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          isVerified={!!(profile?.nid || profile?.tin)}
+          subscriptionType={profile?.subscription_type ?? ""}
         />
-      </div>
 
-      {/* Manage */}
-      <Tabs defaultValue="create-post">
-        <TabsList className="bg-gray-100 rounded-xl p-1 h-auto flex flex-wrap gap-1">
+        <main className="flex-1 min-w-0 max-w-3xl mx-auto w-full space-y-8">
+          {/* Profile header card */}
+          {profile && <ProfileHeader user={profile} />}
+
+          {/* Gallery */}
+          <div id="gallery" className="scroll-mt-24">
+            <Gallery posts={posts} />
+          </div>
+
+          {/* Posts */}
+          <div id="posts" className="scroll-mt-24">
+            <h2 className="text-sm font-bold text-slate-900 mb-4">Posts</h2>
+            <MyPosts
+              posts={posts}
+              hasMore={hasMorePosts}
+              onLoadMore={loadMorePosts}
+              loadingMore={loadingMore}
+              onDeleted={handlePostDeleted}
+              onEdited={handlePostEdited}
+            />
+          </div>
+
+          {/* Manage */}
+          <div id="manage" className="scroll-mt-24">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as string)}>
+            <TabsList className="bg-gray-100 rounded-xl p-1 h-auto flex flex-wrap gap-1">
           <TabsTrigger value="create-post" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-3 py-2 text-sm font-medium flex items-center gap-1.5">
             <PlusCircle size={14} /> New Post
           </TabsTrigger>
@@ -242,7 +257,12 @@ function DashboardContent({ phone, userId }: { phone: string; userId: string }) 
         <TabsContent value="analytics" className="mt-6">
           <ProfileAnalytics userId={userId} />
         </TabsContent>
-      </Tabs>
+          </Tabs>
+          </div>
+        </main>
+
+        <RightSidebar isLoggedIn={true} />
+      </div>
     </div>
   );
 }

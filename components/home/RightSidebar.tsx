@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Eye, Megaphone, Phone, PlayCircle, Globe } from "lucide-react";
+import { ArrowRight, Eye, Megaphone, Phone, PlayCircle, Globe, Smartphone, Apple } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import PostDetailSheet from "@/components/feed/PostDetailSheet";
 import { publicApi } from "@/lib/api";
@@ -36,9 +36,25 @@ export default function RightSidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [topUsers, setTopUsers] = useState<TopUser[]>([]);
   const [social, setSocial] = useState<SocialItem[]>([]);
   const [activePost, setActivePost] = useState<FeedPost | null>(null);
+  const [androidUrl, setAndroidUrl] = useState<string | null>(null);
+  const [iosUrl, setIosUrl] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
+    publicApi
+      .get("/get_app_version", { params: { platform: "android" } })
+      .then((r: { data: { store_url?: string } }) => setAndroidUrl(r.data.store_url || null))
+      .catch(() => {});
+
+    publicApi
+      .get("/get_app_version", { params: { platform: "ios" } })
+      .then((r: { data: { store_url?: string } }) => {
+        const url = r.data.store_url || "";
+        // Not configured yet on the backend -- don't link to a dead placeholder.
+        setIosUrl(url && !url.includes("REPLACE") ? url : null);
+      })
+      .catch(() => {});
+
     publicApi
       .get("/get_categories_name")
       .then((r: { data: { categories?: Category[] } }) => setCategories((r.data.categories ?? []).slice(0, 8)))
@@ -89,6 +105,52 @@ export default function RightSidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   return (
     <aside className="hidden xl:flex flex-col gap-4 sticky top-20 self-start w-[300px] shrink-0 max-h-[calc(100vh-5.5rem)] overflow-y-auto pb-6">
+      {/* Get the app */}
+      <div className="bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF] rounded-xl p-4">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-white/70 mb-3">Get the App</p>
+          <div className="flex flex-col gap-2">
+            {androidUrl ? (
+              <a
+                href={androidUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 bg-white/10 hover:bg-white/15 border border-white/20 rounded-lg px-3 py-2 transition"
+              >
+                <Smartphone size={18} className="text-white flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[9px] text-white/60 leading-none">GET IT ON</p>
+                  <p className="text-xs font-semibold text-white leading-tight">Google Play</p>
+                </div>
+              </a>
+            ) : (
+              <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-lg px-3 py-2 opacity-60">
+                <Smartphone size={18} className="text-white flex-shrink-0" />
+                <p className="text-xs font-medium text-white/70">Android — coming soon</p>
+              </div>
+            )}
+
+            {iosUrl ? (
+              <a
+                href={iosUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 bg-white/10 hover:bg-white/15 border border-white/20 rounded-lg px-3 py-2 transition"
+              >
+                <Apple size={18} className="text-white flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[9px] text-white/60 leading-none">DOWNLOAD ON THE</p>
+                  <p className="text-xs font-semibold text-white leading-tight">App Store</p>
+                </div>
+              </a>
+            ) : (
+              <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-lg px-3 py-2 opacity-60">
+                <Apple size={18} className="text-white flex-shrink-0" />
+                <p className="text-xs font-medium text-white/70">iOS — coming soon</p>
+              </div>
+            )}
+          </div>
+        </div>
+
       {/* Browse categories */}
       <Widget title="Browse Categories" viewAllHref="/categories">
         {categories.length === 0 ? (
@@ -99,7 +161,7 @@ export default function RightSidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
               <Link
                 key={c.cat_id}
                 href={`/categories/${c.cat_id}`}
-                className="flex items-center gap-2 text-xs font-medium text-slate-700 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 rounded-lg px-2.5 py-2 transition truncate"
+                className="flex items-center gap-2 text-xs font-medium text-slate-700 bg-slate-50 hover:bg-[#6C78DF]/10 hover:text-[#30337A] rounded-lg px-2.5 py-2 transition truncate"
               >
                 {c.cat_name}
               </Link>
@@ -152,7 +214,7 @@ export default function RightSidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
                   href={href}
                   className="flex items-center gap-2.5 hover:bg-slate-50 rounded-lg p-1.5 -m-1.5 transition"
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8990E8] to-[#30337A] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                     {u.name?.charAt(0).toUpperCase() ?? "?"}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -187,7 +249,7 @@ export default function RightSidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={s.photo} alt="" className="w-full h-full object-cover" />
                   ) : s.kind === "fb" ? (
-                    <Globe size={14} className="text-blue-600" />
+                    <Globe size={14} className="text-[#6C78DF]" />
                   ) : (
                     <PlayCircle size={14} className="text-red-600" />
                   )}
@@ -205,10 +267,10 @@ export default function RightSidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
       {/* Business CTA */}
       <Link
         href="/for-business"
-        className="block bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl p-4 text-white hover:shadow-lg transition-all"
+        className="block bg-gradient-to-br from-[#30337A] to-[#6C78DF] rounded-xl p-4 text-white hover:shadow-lg transition-all"
       >
         <p className="text-sm font-bold mb-1">Own a business?</p>
-        <p className="text-xs text-blue-100 mb-3">Get listed and reach more customers across Bangladesh.</p>
+        <p className="text-xs text-white/80 mb-3">Get listed and reach more customers across Bangladesh.</p>
         <span className="inline-flex items-center gap-1 text-xs font-semibold bg-white/15 rounded-full px-3 py-1.5">
           Get Started <ArrowRight size={12} />
         </span>
@@ -238,7 +300,7 @@ function Widget({
           {title}
         </span>
         {viewAllHref && (
-          <Link href={viewAllHref} className="text-[11px] font-medium text-blue-600 hover:text-blue-700">
+          <Link href={viewAllHref} className="text-[11px] font-medium text-[#6C78DF] hover:text-[#30337A]">
             View all
           </Link>
         )}
