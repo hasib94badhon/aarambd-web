@@ -49,6 +49,7 @@ export default function Navbar() {
     { href: "/categories", label: "Categories" },
     { href: "/businesses", label: "Businesses" },
     { href: "/services", label: "Services" },
+    { href: "/social", label: "Social" },
     { href: "/trending", label: "Trending" },
   ];
 
@@ -107,6 +108,13 @@ export default function Navbar() {
                 </Link>
               </>
             )}
+
+            <Link
+              href="/for-business"
+              className="text-sm font-semibold text-blue-700 border border-blue-200 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-all ml-1"
+            >
+              For Business
+            </Link>
 
             {isLoggedIn ? (
               <div className="flex items-center gap-1 ml-2 pl-2 border-l border-slate-200">
@@ -190,6 +198,20 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
+          <Link
+            href="/for-business"
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center py-2.5 px-3 text-sm font-semibold text-blue-700 hover:bg-blue-50 rounded-xl transition-all"
+          >
+            For Business
+          </Link>
+          <Link
+            href="/partner"
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center py-2.5 px-3 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+          >
+            Become a Partner
+          </Link>
 
           {isLoggedIn ? (
             <div className="pt-2 mt-1 border-t border-slate-100 space-y-1">

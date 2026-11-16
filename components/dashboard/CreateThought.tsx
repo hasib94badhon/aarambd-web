@@ -12,9 +12,11 @@ interface DesCategory {
 
 interface Props {
   userId: string;
+  defaultCatId?: number;
+  onPublished?: () => void;
 }
 
-export default function CreateThought({ userId }: Props) {
+export default function CreateThought({ userId, defaultCatId, onPublished }: Props) {
   const [categories, setCategories] = useState<DesCategory[]>([]);
   const [desCatId, setDesCatId] = useState("");
   const [description, setDescription] = useState("");
@@ -31,9 +33,14 @@ export default function CreateThought({ userId }: Props) {
       .then((r) => {
         const cats: DesCategory[] = r.data.categories ?? [];
         setCategories(cats);
-        if (cats.length > 0) setDesCatId(String(cats[0].des_cat_id));
+        if (defaultCatId && cats.some((c) => c.des_cat_id === defaultCatId)) {
+          setDesCatId(String(defaultCatId));
+        } else if (cats.length > 0) {
+          setDesCatId(String(cats[0].des_cat_id));
+        }
       })
       .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFile = (f: File | null) => {
@@ -71,6 +78,7 @@ export default function CreateThought({ userId }: Props) {
       setFile(null);
       setPreview(null);
       setTimeout(() => setSuccess(false), 3000);
+      onPublished?.();
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??

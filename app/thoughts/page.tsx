@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Lightbulb,
   User,
   Eye,
   MessageCircle,
-  X,
-  Send,
   Loader2,
   ChevronRight,
+  PenSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
-import { api } from "@/lib/api";
+import CreateThought from "@/components/dashboard/CreateThought";
+import ThoughtDetailSheet from "@/components/feed/ThoughtDetailSheet";
+import { publicApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 
 interface DesCategory {
@@ -37,29 +38,6 @@ interface Thought {
   des_com: number;
 }
 
-interface ThoughtDetail {
-  des_id: number;
-  des: string;
-  des_photo: string;
-  des_view: number;
-  time: string;
-  des_cat: string;
-  user_id: number;
-  user_name: string;
-  user_photo: string;
-  cat_name: string;
-  des_com: number;
-}
-
-interface Comment {
-  com_id: number;
-  com_text: string;
-  com_time: string;
-  user_id: number;
-  commenter_name: string;
-  photo: string;
-}
-
 const PAGE_SIZE = 12;
 
 export default function ThoughtsPage() {
@@ -74,19 +52,16 @@ export default function ThoughtsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [composerOpen, setComposerOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     hydrate();
     setHydrated(true);
   }, [hydrate]);
 
-  // Fetch categories
   useEffect(() => {
-    if (!hydrated || !isLoggedIn) {
-      setCatsLoading(false);
-      return;
-    }
-    api
+    publicApi
       .get("/get_description_categories")
       .then((r) => {
         const cats: DesCategory[] = r.data.categories ?? [];
@@ -95,15 +70,14 @@ export default function ThoughtsPage() {
       })
       .catch(() => {})
       .finally(() => setCatsLoading(false));
-  }, [hydrated, isLoggedIn]);
+  }, []);
 
-  // Fetch thoughts when category changes
-  useEffect(() => {
+  const loadThoughts = () => {
     if (!activeCat) return;
     setLoading(true);
     setPage(1);
     setThoughts([]);
-    api
+    publicApi
       .get("/get_description_by_cat", { params: { des_cat_id: activeCat, page: 1, page_size: PAGE_SIZE } })
       .then((r) => {
         const items: Thought[] = r.data.descriptions ?? [];
@@ -112,14 +86,16 @@ export default function ThoughtsPage() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [activeCat]);
+  };
+
+  useEffect(loadThoughts, [activeCat]);
 
   const loadMore = async () => {
     if (!activeCat) return;
     setLoadingMore(true);
     const nextPage = page + 1;
     try {
-      const r = await api.get("/get_description_by_cat", {
+      const r = await publicApi.get("/get_description_by_cat", {
         params: { des_cat_id: activeCat, page: nextPage, page_size: PAGE_SIZE },
       });
       const items: Thought[] = r.data.descriptions ?? [];
@@ -133,24 +109,15 @@ export default function ThoughtsPage() {
     }
   };
 
-  if (!hydrated) return null;
+  const openDetail = (desId: number) => {
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+    setSelectedId(desId);
+  };
 
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-center px-4">
-        <div className="w-14 h-14 rounded-2xl bg-yellow-50 flex items-center justify-center">
-          <Lightbulb size={24} className="text-yellow-500" />
-        </div>
-        <h2 className="text-xl font-bold text-gray-900">Thoughts &amp; Needs</h2>
-        <p className="text-sm text-gray-400 max-w-xs">
-          Login to browse thoughts and needs posted by the community.
-        </p>
-        <Link href="/login">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">Login to Continue</Button>
-        </Link>
-      </div>
-    );
-  }
+  if (!hydrated) return null;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -163,6 +130,33 @@ export default function ThoughtsPage() {
           <h1 className="text-2xl font-extrabold text-gray-900">Thoughts &amp; Needs</h1>
           <p className="text-sm text-gray-400">Browse what the community is looking for</p>
         </div>
+      </div>
+
+      {/* Composer */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 mb-6">
+        {composerOpen && isLoggedIn && user ? (
+          <CreateThought
+            userId={String(user.user_id)}
+            defaultCatId={activeCat ?? undefined}
+            onPublished={() => {
+              setComposerOpen(false);
+              loadThoughts();
+            }}
+          />
+        ) : (
+          <button
+            onClick={() => (isLoggedIn ? setComposerOpen(true) : router.push("/login"))}
+            className="w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg hover:bg-gray-50 transition"
+          >
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+              {isLoggedIn && user ? user.name?.charAt(0).toUpperCase() ?? "?" : <User size={16} />}
+            </div>
+            <span className="flex-1 text-sm text-gray-400 bg-gray-50 rounded-full px-4 py-2.5">
+              {isLoggedIn ? "Share a thought or need…" : "Sign in to share a thought or need…"}
+            </span>
+            <PenSquare size={18} className="text-gray-400" />
+          </button>
+        )}
       </div>
 
       {/* Category tabs */}
@@ -203,7 +197,7 @@ export default function ThoughtsPage() {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {thoughts.map((t) => (
-              <ThoughtCard key={t.des_id} thought={t} onClick={() => setSelectedId(t.des_id)} />
+              <ThoughtCard key={t.des_id} thought={t} onClick={() => openDetail(t.des_id)} />
             ))}
           </div>
           {hasMore && (
@@ -261,193 +255,5 @@ function ThoughtCard({ thought, onClick }: { thought: Thought; onClick: () => vo
         </div>
       </div>
     </button>
-  );
-}
-
-function ThoughtDetailSheet({
-  desId,
-  user,
-  onClose,
-}: {
-  desId: number;
-  user: { user_id: number; name: string } | null;
-  onClose: () => void;
-}) {
-  const [thought, setThought] = useState<ThoughtDetail | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [commentText, setCommentText] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      api.get("/get_thought", { params: { des_id: desId } }),
-      api.get("/get_thought_comments", { params: { des_id: desId, page: 1, page_size: 20 } }),
-    ])
-      .then(([tRes, cRes]) => {
-        setThought(tRes.data.thought);
-        setComments(cRes.data.comments ?? []);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-
-    // Track view
-    if (user) {
-      api.post("/increase_thought_view", { user_id: user.user_id, des_id: desId }).catch(() => {});
-    }
-  }, [desId, user]);
-
-  const handleSubmit = async (e: { preventDefault(): void }) => {
-    e.preventDefault();
-    if (!commentText.trim() || !user) return;
-    setSubmitting(true);
-    try {
-      await api.post("/submit_thought", {
-        com_user_id: user.user_id,
-        des_id: desId,
-        com_text: commentText.trim(),
-      });
-      setComments((prev) => [
-        {
-          com_id: Date.now(),
-          com_text: commentText.trim(),
-          com_time: new Date().toLocaleString(),
-          user_id: user.user_id,
-          commenter_name: user.name,
-          photo: "",
-        },
-        ...prev,
-      ]);
-      setCommentText("");
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    } catch {
-      /* silent */
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <>
-      {/* Overlay */}
-      <div
-        className="fixed inset-0 bg-black/40 z-40"
-        onClick={onClose}
-      />
-
-      {/* Sheet */}
-      <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white z-50 shadow-2xl flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-gray-900">Thought</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition">
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto">
-          {loading ? (
-            <div className="p-5 space-y-4">
-              <Skeleton className="h-40 rounded-xl" />
-              <Skeleton className="h-5 w-3/4" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-            </div>
-          ) : thought ? (
-            <div className="p-5">
-              {thought.des_photo && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={thought.des_photo}
-                  alt=""
-                  className="w-full rounded-xl object-cover max-h-52 mb-4"
-                />
-              )}
-
-              {/* Author */}
-              <Link
-                href={`/profile/${thought.user_id}`}
-                className="flex items-center gap-2 mb-3 hover:opacity-75 transition"
-              >
-                <div className="w-8 h-8 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
-                  {thought.user_photo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={thought.user_photo} alt={thought.user_name} className="w-full h-full object-cover" />
-                  ) : (
-                    <User size={13} className="text-gray-300" />
-                  )}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">{thought.user_name}</p>
-                  <p className="text-xs text-gray-400">{thought.cat_name}</p>
-                </div>
-              </Link>
-
-              <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line mb-4">{thought.des}</p>
-
-              <div className="flex gap-4 text-xs text-gray-400 mb-4">
-                <span className="flex items-center gap-1"><Eye size={11} /> {thought.des_view}</span>
-                <span className="flex items-center gap-1"><MessageCircle size={11} /> {comments.length} comments</span>
-                <span className="ml-auto">{thought.time}</span>
-              </div>
-
-              <Separator className="mb-4" />
-
-              {/* Comments */}
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Comments</h3>
-              {comments.length === 0 ? (
-                <p className="text-xs text-gray-400 text-center py-6">No comments yet.</p>
-              ) : (
-                <div className="space-y-3 mb-4">
-                  {comments.map((c) => (
-                    <div key={c.com_id} className="flex gap-2">
-                      <div className="w-7 h-7 rounded-full bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center">
-                        {c.photo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={c.photo} alt={c.commenter_name} className="w-full h-full object-cover" />
-                        ) : (
-                          <User size={11} className="text-gray-300" />
-                        )}
-                      </div>
-                      <div className="flex-1 bg-gray-50 rounded-xl px-3 py-2">
-                        <p className="text-xs font-semibold text-gray-800">{c.commenter_name}</p>
-                        <p className="text-xs text-gray-600 mt-0.5">{c.com_text}</p>
-                      </div>
-                    </div>
-                  ))}
-                  <div ref={bottomRef} />
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="p-5 text-center text-sm text-gray-400">Unable to load thought.</div>
-          )}
-        </div>
-
-        {/* Comment form */}
-        {user && (
-          <div className="border-t border-gray-100 px-4 py-3 bg-white">
-            <form onSubmit={handleSubmit} className="flex gap-2">
-              <input
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Write a comment…"
-                className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-              <Button
-                type="submit"
-                size="sm"
-                disabled={!commentText.trim() || submitting}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3"
-              >
-                {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
-              </Button>
-            </form>
-          </div>
-        )}
-      </div>
-    </>
   );
 }
