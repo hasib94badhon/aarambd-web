@@ -51,36 +51,36 @@ export default function ProfileHeader({ user }: { user: DashboardUser }) {
   };
 
   return (
-    <div className="relative rounded-[28px] overflow-hidden shadow-2xl shadow-slate-900/20">
-      {/* Card background: deep navy-to-black with gold foil accents */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-[#0b1326] to-black" />
+    <div className="relative rounded-[28px] overflow-hidden shadow-2xl shadow-[#6C78DF]/20">
+      {/* Card background: AaramBD brand gradient — deep indigo to the real logo periwinkle */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF]" />
       <div
-        className="absolute inset-0 opacity-[0.07]"
+        className="absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
-            "linear-gradient(135deg, transparent 40%, #d4af37 40%, #d4af37 41%, transparent 41%), linear-gradient(135deg, transparent 60%, #d4af37 60%, #d4af37 61%, transparent 61%)",
+            "linear-gradient(135deg, transparent 40%, #ffffff 40%, #ffffff 41%, transparent 41%), linear-gradient(135deg, transparent 60%, #ffffff 60%, #ffffff 61%, transparent 61%)",
           backgroundSize: "200px 200px",
         }}
       />
-      <div className="absolute -top-24 -right-24 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-16 -left-16 w-60 h-60 bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-16 -left-16 w-60 h-60 bg-[#6C78DF]/30 rounded-full blur-3xl" />
 
-      {/* Top gold hairline */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/70 to-transparent" />
+      {/* Top hairline */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
       <div className="relative p-6 sm:p-8">
         {/* Card brand row */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-gradient-to-br from-amber-300 to-amber-600 flex items-center justify-center shadow-sm">
-              <span className="text-slate-900 font-black text-xs">A</span>
+            <div className="w-7 h-7 rounded-md bg-white flex items-center justify-center shadow-sm">
+              <span className="text-[#6C78DF] font-black text-xs">A</span>
             </div>
-            <span className="text-[11px] font-semibold tracking-[0.2em] text-amber-200/80 uppercase">
+            <span className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">
               Member Card
             </span>
           </div>
           {isPremium && (
-            <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-amber-300 bg-amber-400/10 border border-amber-400/30 rounded-full px-3 py-1">
+            <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-white/15 border border-white/25 rounded-full px-3 py-1">
               <Crown size={12} /> {user.subscription_type}
             </span>
           )}
@@ -90,21 +90,21 @@ export default function ProfileHeader({ user }: { user: DashboardUser }) {
         <div className="flex flex-col sm:flex-row sm:items-center gap-6">
           {/* Avatar */}
           <div className="relative flex-shrink-0">
-            <div className="w-28 h-28 rounded-2xl p-[2px] bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 shadow-lg">
-              <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-800">
+            <div className="w-28 h-28 rounded-2xl p-[2px] bg-white shadow-lg">
+              <div className="w-full h-full rounded-2xl overflow-hidden bg-[#30337A]">
                 {user.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-4xl text-slate-500">
+                  <div className="w-full h-full flex items-center justify-center text-4xl text-white/60">
                     {user.name?.charAt(0).toUpperCase() ?? "?"}
                   </div>
                 )}
               </div>
             </div>
             {isVerified && (
-              <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-blue-500 border-2 border-slate-900 flex items-center justify-center">
-                <BadgeCheck size={14} className="text-white" />
+              <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-white border-2 border-[#30337A] flex items-center justify-center">
+                <BadgeCheck size={14} className="text-[#6C78DF]" />
               </div>
             )}
           </div>
@@ -116,17 +116,17 @@ export default function ProfileHeader({ user }: { user: DashboardUser }) {
             </h1>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
               {user.cat_name && (
-                <span className="text-sm font-medium text-amber-200/90 italic">{user.cat_name}</span>
+                <span className="text-sm font-medium text-white/80 italic">{user.cat_name}</span>
               )}
               {user.location && (
-                <span className="flex items-center gap-1 text-xs text-slate-400">
+                <span className="flex items-center gap-1 text-xs text-white/55">
                   <MapPin size={12} /> {user.location}
                 </span>
               )}
             </div>
             {user.phone && (
-              <span className="flex items-center gap-1.5 text-xs text-slate-300 mt-2">
-                <Phone size={12} className="text-amber-300" /> {user.phone}
+              <span className="flex items-center gap-1.5 text-xs text-white/70 mt-2">
+                <Phone size={12} className="text-white" /> {user.phone}
               </span>
             )}
           </div>
@@ -136,13 +136,13 @@ export default function ProfileHeader({ user }: { user: DashboardUser }) {
             <Link
               href={`/profile/${user.user_id}`}
               target="_blank"
-              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-white/10 hover:bg-white/15 text-white border border-white/15 rounded-xl px-4 py-2.5 transition whitespace-nowrap"
+              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-white/10 hover:bg-white/15 text-white border border-white/20 rounded-xl px-4 py-2.5 transition whitespace-nowrap"
             >
               <ExternalLink size={13} /> View Public Profile
             </Link>
             <button
               onClick={handleShare}
-              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-amber-400/10 hover:bg-amber-400/20 text-amber-200 border border-amber-400/30 rounded-xl px-4 py-2.5 transition whitespace-nowrap"
+              className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-white hover:bg-white/90 text-[#30337A] rounded-xl px-4 py-2.5 transition whitespace-nowrap"
             >
               {copied ? <Check size={13} /> : <Share2 size={13} />}
               {copied ? "Link Copied" : "Share Card"}
@@ -152,13 +152,13 @@ export default function ProfileHeader({ user }: { user: DashboardUser }) {
 
         {/* Description */}
         {user.description && (
-          <p className="mt-5 text-sm text-slate-300/90 leading-relaxed max-w-2xl border-l-2 border-amber-400/30 pl-3">
+          <p className="mt-5 text-sm text-white/80 leading-relaxed max-w-2xl border-l-2 border-white/25 pl-3">
             {user.description}
           </p>
         )}
 
         {/* Divider */}
-        <div className="mt-6 border-t border-white/10" />
+        <div className="mt-6 border-t border-white/15" />
 
         {/* Stats strip */}
         <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-3">
@@ -169,12 +169,12 @@ export default function ProfileHeader({ user }: { user: DashboardUser }) {
             { icon: FileText, label: "Posts", value: user.user_total_post },
           ].map((s) => (
             <div key={s.label} className="flex items-center gap-2">
-              <s.icon size={14} className="text-amber-300/80" />
+              <s.icon size={14} className="text-white/70" />
               <span className="text-base font-bold text-white tabular-nums">{s.value ?? 0}</span>
-              <span className="text-xs text-slate-400">{s.label}</span>
+              <span className="text-xs text-white/55">{s.label}</span>
             </div>
           ))}
-          <div className="ml-auto flex items-center gap-1.5 text-[10px] text-slate-500 tracking-widest uppercase">
+          <div className="ml-auto flex items-center gap-1.5 text-[10px] text-white/45 tracking-widest uppercase">
             <QrCode size={12} />
             ID {user.user_id.padStart(6, "0")}
           </div>

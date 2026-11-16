@@ -62,8 +62,8 @@ export default function ProfileAnalytics({ userId }: Props) {
     <div className="space-y-6">
       {/* Summary chips */}
       <div className="grid grid-cols-3 gap-4">
-        <StatChip icon={<Eye size={16} className="text-blue-500" />} label="Profile Views" value={viewers.reduce((s, v) => s + v.total_views, 0)} />
-        <StatChip icon={<Phone size={16} className="text-blue-600" />} label="Incoming Calls" value={incoming.reduce((s, c) => s + c.total_calls, 0)} />
+        <StatChip icon={<Eye size={16} className="text-[#6C78DF]" />} label="Profile Views" value={viewers.reduce((s, v) => s + v.total_views, 0)} />
+        <StatChip icon={<Phone size={16} className="text-[#6C78DF]" />} label="Incoming Calls" value={incoming.reduce((s, c) => s + c.total_calls, 0)} />
         <StatChip icon={<BarChart2 size={16} className="text-purple-500" />} label="Unique Callers" value={incoming.length} />
       </div>
 
@@ -90,7 +90,7 @@ export default function ProfileAnalytics({ userId }: Props) {
               count: v.total_views,
               time: v.last_view_time,
               countLabel: "views",
-              icon: <Eye size={12} className="text-blue-400" />,
+              icon: <Eye size={12} className="text-[#8990E8]" />,
             }))}
             emptyMsg="Nobody has viewed your profile yet."
           />

@@ -94,7 +94,7 @@ export default function CreateThought({ userId, defaultCatId, onPublished }: Pro
       <h2 className="text-base font-bold text-gray-900 mb-4">Share a Thought or Need</h2>
 
       {success && (
-        <div className="flex items-center gap-2 text-sm text-blue-700 bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-4">
+        <div className="flex items-center gap-2 text-sm text-[#30337A] bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-4">
           <CheckCircle size={16} /> Thought published!
         </div>
       )}
@@ -107,7 +107,7 @@ export default function CreateThought({ userId, defaultCatId, onPublished }: Pro
           <select
             value={desCatId}
             onChange={(e) => setDesCatId(e.target.value)}
-            className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
+            className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6C78DF]/40 bg-white"
           >
             {categories.map((c) => (
               <option key={c.des_cat_id} value={String(c.des_cat_id)}>
@@ -123,7 +123,7 @@ export default function CreateThought({ userId, defaultCatId, onPublished }: Pro
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe what you're looking for or share a thought with the community…"
           rows={4}
-          className="w-full text-sm border border-gray-200 rounded-xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="w-full text-sm border border-gray-200 rounded-xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#6C78DF]/40"
         />
 
         {/* Image preview */}
@@ -163,7 +163,7 @@ export default function CreateThought({ userId, defaultCatId, onPublished }: Pro
           <Button
             type="submit"
             disabled={submitting || !description.trim()}
-            className="ml-auto bg-blue-600 hover:bg-blue-700 text-white gap-2"
+            className="ml-auto bg-[#6C78DF] hover:bg-[#5A64D4] text-white gap-2"
           >
             {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
             Publish

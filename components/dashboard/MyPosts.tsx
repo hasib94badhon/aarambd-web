@@ -158,7 +158,7 @@ function PostRow({
                 value={editDesc}
                 onChange={(e) => setEditDesc(e.target.value)}
                 rows={3}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#6C78DF]/40"
                 placeholder="Main description…"
                 autoFocus
               />
@@ -194,7 +194,7 @@ function PostRow({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={newFiles.length >= 5}
-                  className="flex items-center gap-1 text-xs text-gray-400 hover:text-blue-600 transition"
+                  className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#6C78DF] transition"
                 >
                   <ImagePlus size={13} /> Add photo
                 </button>
@@ -208,7 +208,7 @@ function PostRow({
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 disabled:opacity-60"
+                    className="text-xs bg-[#6C78DF] hover:bg-[#5A64D4] text-white px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 disabled:opacity-60"
                   >
                     {saving ? <Loader2 size={11} className="animate-spin" /> : <Check size={11} />}
                     Save
@@ -224,7 +224,7 @@ function PostRow({
           <div className="flex-shrink-0 flex flex-col items-center justify-center gap-2 pr-4">
             <button
               onClick={() => { setEditing(true); setSaveError(""); }}
-              className="p-2 text-gray-300 hover:text-blue-500 transition rounded-lg"
+              className="p-2 text-gray-300 hover:text-[#6C78DF] transition rounded-lg"
               title="Edit post"
             >
               <Pencil size={15} />

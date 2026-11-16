@@ -37,7 +37,7 @@ export default function Gallery({ posts }: { posts: PostItem[] }) {
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
       <div className="flex items-center justify-between mb-4">
         <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900">
-          <Images size={16} className="text-amber-500" /> Gallery
+          <Images size={16} className="text-[#6C78DF]" /> Gallery
         </h2>
         <span className="text-xs text-slate-400">{images.length} photo{images.length !== 1 ? "s" : ""}</span>
       </div>
@@ -95,7 +95,7 @@ export default function Gallery({ posts }: { posts: PostItem[] }) {
             <a
               href={`#post-${images[activeIndex].postId}`}
               onClick={close}
-              className="flex items-center gap-1.5 text-sm font-medium text-amber-300 hover:text-amber-200 transition"
+              className="flex items-center gap-1.5 text-sm font-medium text-[#A5ACEB] hover:text-white transition"
             >
               View post <ArrowRight size={14} />
             </a>

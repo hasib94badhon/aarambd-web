@@ -95,7 +95,7 @@ export default function EditProfile({ phone, initialName, initialDescription, in
       )}
 
       {success && (
-        <div className="mb-5 bg-green-50 border border-green-200 text-blue-700 text-sm rounded-lg px-4 py-3 flex items-center gap-2">
+        <div className="mb-5 bg-green-50 border border-green-200 text-[#30337A] text-sm rounded-lg px-4 py-3 flex items-center gap-2">
           <CheckCircle size={16} /> Profile updated successfully
         </div>
       )}
@@ -172,7 +172,7 @@ export default function EditProfile({ phone, initialName, initialDescription, in
             id="category"
             value={catId}
             onChange={(e) => setCatId(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#6C78DF]/40 bg-white"
           >
             <option value="">Select a category</option>
             {categories.map((c) => (
@@ -186,7 +186,7 @@ export default function EditProfile({ phone, initialName, initialDescription, in
         <Button
           type="submit"
           disabled={saving}
-          className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+          className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white gap-2"
         >
           {saving ? <Loader2 size={14} className="animate-spin" /> : null}
           Save Changes

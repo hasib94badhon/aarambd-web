@@ -70,7 +70,7 @@ export default function DashboardPage() {
   if (!hydrated || !isLoggedIn || !user) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center">
-        <Loader2 size={32} className="animate-spin text-blue-500" />
+        <Loader2 size={32} className="animate-spin text-[#6C78DF]" />
       </div>
     );
   }
@@ -250,12 +250,12 @@ function DashboardContent({ phone, userId }: { phone: string; userId: string }) 
 function DashboardSkeleton() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div className="rounded-[28px] bg-slate-900 p-8">
+      <div className="rounded-[28px] bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF] p-8">
         <div className="flex items-center gap-6">
-          <Skeleton className="w-28 h-28 rounded-2xl bg-slate-700" />
+          <Skeleton className="w-28 h-28 rounded-2xl bg-white/15" />
           <div className="flex-1 space-y-3">
-            <Skeleton className="h-7 w-48 bg-slate-700" />
-            <Skeleton className="h-4 w-32 bg-slate-700" />
+            <Skeleton className="h-7 w-48 bg-white/15" />
+            <Skeleton className="h-4 w-32 bg-white/15" />
           </div>
         </div>
       </div>

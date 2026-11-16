@@ -77,7 +77,7 @@ export default function CreatePost({ phone, onCreated }: Props) {
       <h2 className="text-base font-bold text-gray-900 mb-4">Create a Post</h2>
 
       {success && (
-        <div className="flex items-center gap-2 text-sm text-blue-700 bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-4">
+        <div className="flex items-center gap-2 text-sm text-[#30337A] bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-4">
           <CheckCircle size={16} /> Post published successfully!
         </div>
       )}
@@ -89,7 +89,7 @@ export default function CreatePost({ phone, onCreated }: Props) {
           onChange={(e) => setMainDesc(e.target.value)}
           placeholder="What's on your mind? Share an update, offer, or announcement…"
           rows={4}
-          className="w-full text-sm border border-gray-200 rounded-xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="w-full text-sm border border-gray-200 rounded-xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#6C78DF]/40"
         />
 
         {/* Image previews */}
@@ -114,7 +114,7 @@ export default function CreatePost({ phone, onCreated }: Props) {
                     setCaptions(c);
                   }}
                   placeholder="Caption (optional)"
-                  className="mt-1 w-full text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-300"
+                  className="mt-1 w-full text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#6C78DF]/40"
                 />
               </div>
             ))}
@@ -146,7 +146,7 @@ export default function CreatePost({ phone, onCreated }: Props) {
           <Button
             type="submit"
             disabled={submitting || (!mainDesc.trim() && files.length === 0)}
-            className="ml-auto bg-blue-600 hover:bg-blue-700 text-white gap-2"
+            className="ml-auto bg-[#6C78DF] hover:bg-[#5A64D4] text-white gap-2"
           >
             {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
             Publish

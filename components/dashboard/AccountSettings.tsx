@@ -195,7 +195,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
           </div>
         )}
         {emailSuccess && (
-          <div className="mb-4 bg-green-50 border border-green-200 text-blue-700 text-sm rounded-lg px-4 py-3 flex items-center gap-2">
+          <div className="mb-4 bg-green-50 border border-green-200 text-[#30337A] text-sm rounded-lg px-4 py-3 flex items-center gap-2">
             <CheckCircle size={16} /> Email updated
           </div>
         )}
@@ -211,7 +211,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
               placeholder="your@email.com"
             />
           </div>
-          <Button type="submit" disabled={savingEmail} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+          <Button type="submit" disabled={savingEmail} className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white gap-2">
             {savingEmail ? <Loader2 size={14} className="animate-spin" /> : null}
             Update Email
           </Button>
@@ -230,7 +230,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
             type="button"
             onClick={() => { setPwMode("password"); setPwError(""); }}
             className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              pwMode === "password" ? "bg-white shadow text-blue-700" : "text-gray-500 hover:text-gray-700"
+              pwMode === "password" ? "bg-white shadow text-[#30337A]" : "text-gray-500 hover:text-gray-700"
             }`}
           >
             Verify with Password
@@ -239,7 +239,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
             type="button"
             onClick={() => { setPwMode("secret"); setPwError(""); }}
             className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              pwMode === "secret" ? "bg-white shadow text-blue-700" : "text-gray-500 hover:text-gray-700"
+              pwMode === "secret" ? "bg-white shadow text-[#30337A]" : "text-gray-500 hover:text-gray-700"
             }`}
           >
             Verify with Secret Code
@@ -252,7 +252,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
           </div>
         )}
         {pwSuccess && (
-          <div className="mb-4 bg-green-50 border border-green-200 text-blue-700 text-sm rounded-lg px-4 py-3 flex items-center gap-2">
+          <div className="mb-4 bg-green-50 border border-green-200 text-[#30337A] text-sm rounded-lg px-4 py-3 flex items-center gap-2">
             <CheckCircle size={16} /> Password changed successfully
           </div>
         )}
@@ -329,7 +329,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
           </div>
 
           <p className="text-xs text-gray-400">At least 6 characters.</p>
-          <Button type="submit" disabled={savingPw} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+          <Button type="submit" disabled={savingPw} className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white gap-2">
             {savingPw ? <Loader2 size={14} className="animate-spin" /> : null}
             Change Password
           </Button>
@@ -349,7 +349,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
           </div>
         )}
         {secretSuccess && (
-          <div className="mb-4 bg-green-50 border border-green-200 text-blue-700 text-sm rounded-lg px-4 py-3 flex items-center gap-2">
+          <div className="mb-4 bg-green-50 border border-green-200 text-[#30337A] text-sm rounded-lg px-4 py-3 flex items-center gap-2">
             <CheckCircle size={16} /> Secret code changed successfully
           </div>
         )}
@@ -377,7 +377,7 @@ export default function AccountSettings({ userId, initialEmail, phone, initialCa
               required
             />
           </div>
-          <Button type="submit" disabled={savingSecret} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+          <Button type="submit" disabled={savingSecret} className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white gap-2">
             {savingSecret ? <Loader2 size={14} className="animate-spin" /> : null}
             Change Secret Code
           </Button>

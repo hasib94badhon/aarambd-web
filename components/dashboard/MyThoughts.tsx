@@ -136,7 +136,7 @@ function ThoughtRow({ thought, onDelete }: { thought: Thought; onDelete: (id: nu
       {/* Content */}
       <div className="flex-1 p-4 flex flex-col gap-1.5 min-w-0">
         {thought.des_cat_name && (
-          <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
+          <span className="text-xs font-semibold text-[#6C78DF] uppercase tracking-wide">
             {thought.des_cat_name}
           </span>
         )}
