@@ -124,7 +124,7 @@ function PostRow({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <div id={`post-${post.post_id}`} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden scroll-mt-24">
       <div className="flex gap-0 sm:gap-4">
         {/* Thumbnail */}
         {img ? (

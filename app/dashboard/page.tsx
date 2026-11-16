@@ -2,10 +2,11 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, FileText, PlusCircle, MessageCircle, UserCog, Settings2, BarChart2 } from "lucide-react";
+import { Loader2, PlusCircle, MessageCircle, UserCog, Settings2, BarChart2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProfileHeader from "@/components/dashboard/ProfileHeader";
+import Gallery from "@/components/dashboard/Gallery";
 import MyPosts from "@/components/dashboard/MyPosts";
 import EditProfile from "@/components/dashboard/EditProfile";
 import AccountSettings from "@/components/dashboard/AccountSettings";
@@ -164,12 +165,25 @@ function DashboardContent({ phone, userId }: { phone: string; userId: string }) 
       {/* Profile header card */}
       {profile && <ProfileHeader user={profile} />}
 
-      {/* Tabs */}
-      <Tabs defaultValue="posts">
+      {/* Gallery */}
+      <Gallery posts={posts} />
+
+      {/* Posts */}
+      <div>
+        <h2 className="text-sm font-bold text-slate-900 mb-4">Posts</h2>
+        <MyPosts
+          posts={posts}
+          hasMore={hasMorePosts}
+          onLoadMore={loadMorePosts}
+          loadingMore={loadingMore}
+          onDeleted={handlePostDeleted}
+          onEdited={handlePostEdited}
+        />
+      </div>
+
+      {/* Manage */}
+      <Tabs defaultValue="create-post">
         <TabsList className="bg-gray-100 rounded-xl p-1 h-auto flex flex-wrap gap-1">
-          <TabsTrigger value="posts" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-3 py-2 text-sm font-medium flex items-center gap-1.5">
-            <FileText size={14} /> Posts
-          </TabsTrigger>
           <TabsTrigger value="create-post" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-3 py-2 text-sm font-medium flex items-center gap-1.5">
             <PlusCircle size={14} /> New Post
           </TabsTrigger>
@@ -189,17 +203,6 @@ function DashboardContent({ phone, userId }: { phone: string; userId: string }) 
             <BarChart2 size={14} /> Analytics
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value="posts" className="mt-6">
-          <MyPosts
-            posts={posts}
-            hasMore={hasMorePosts}
-            onLoadMore={loadMorePosts}
-            loadingMore={loadingMore}
-            onDeleted={handlePostDeleted}
-            onEdited={handlePostEdited}
-          />
-        </TabsContent>
 
         <TabsContent value="create-post" className="mt-6">
           <CreatePost phone={phone} onCreated={loadProfile} />
@@ -247,16 +250,16 @@ function DashboardContent({ phone, userId }: { phone: string; userId: string }) 
 function DashboardSkeleton() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <Skeleton className="h-64 w-full rounded-none" />
-        <div className="px-6 pb-6 -mt-16 space-y-3">
-          <Skeleton className="w-32 h-32 rounded-full" />
-          <Skeleton className="h-7 w-48" />
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-16 w-full max-w-lg" />
+      <div className="rounded-[28px] bg-slate-900 p-8">
+        <div className="flex items-center gap-6">
+          <Skeleton className="w-28 h-28 rounded-2xl bg-slate-700" />
+          <div className="flex-1 space-y-3">
+            <Skeleton className="h-7 w-48 bg-slate-700" />
+            <Skeleton className="h-4 w-32 bg-slate-700" />
+          </div>
         </div>
       </div>
-      <Skeleton className="h-10 w-full max-w-2xl rounded-xl" />
+      <Skeleton className="h-32 w-full rounded-2xl" />
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-24 w-full rounded-xl" />
