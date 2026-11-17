@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Eye, Phone, MapPin, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Eye, Phone, MapPin, CheckCircle2, LayoutGrid } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import CategoryIndexSidebar from "@/components/categories/CategoryIndexSidebar";
 import { publicApi } from "@/lib/api";
 
 interface ListingUser {
@@ -49,45 +50,76 @@ export default function CategoryDetailPage() {
   }, [id]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <Link
-        href="/categories"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 mb-6 transition"
-      >
-        <ArrowLeft size={16} /> Back to Categories
-      </Link>
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      {/* Banner */}
+      <div className="relative rounded-[28px] overflow-hidden mb-6 shadow-2xl shadow-[#6C78DF]/20">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF]" />
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, transparent 40%, #ffffff 40%, #ffffff 41%, transparent 41%), linear-gradient(135deg, transparent 60%, #ffffff 60%, #ffffff 61%, transparent 61%)",
+            backgroundSize: "200px 200px",
+          }}
+        />
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-16 -left-16 w-60 h-60 bg-[#6C78DF]/30 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900">
-          {loading ? <Skeleton className="h-9 w-56 inline-block" /> : catName}
-        </h1>
-        {!loading && (
-          <p className="text-gray-500 mt-1 text-sm">
-            {users.length} listing{users.length !== 1 ? "s" : ""} in this category
-          </p>
-        )}
+        <div className="relative p-6 sm:p-10">
+          <Link
+            href="/categories"
+            className="inline-flex items-center gap-1.5 text-sm text-white/70 hover:text-white mb-5 transition"
+          >
+            <ArrowLeft size={16} /> Back to Categories
+          </Link>
+
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-7 h-7 rounded-md bg-white flex items-center justify-center shadow-sm">
+              <LayoutGrid size={14} className="text-[#6C78DF]" />
+            </div>
+            <span className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">
+              Category
+            </span>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+            {loading ? <Skeleton className="h-9 w-56 bg-white/15 inline-block" /> : catName}
+          </h1>
+          {!loading && (
+            <p className="text-sm sm:text-base text-white/70">
+              {users.length} listing{users.length !== 1 ? "s" : ""} in this category
+            </p>
+          )}
+        </div>
       </div>
 
-      {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-48 rounded-xl" />
-          ))}
-        </div>
-      ) : users.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-gray-400 text-lg">No listings found in this category yet.</p>
-          <Link href="/register" className="text-blue-600 text-sm mt-2 block hover:underline">
-            Be the first to list your business
-          </Link>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {users.map((u) => (
-            <UserCard key={u.user_id} user={u} />
-          ))}
-        </div>
-      )}
+      <div className="flex gap-4 items-start">
+        <CategoryIndexSidebar activeId={id} />
+
+        <main className="flex-1 min-w-0">
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-48 rounded-xl" />
+              ))}
+            </div>
+          ) : users.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-400 text-lg">No listings found in this category yet.</p>
+              <Link href="/register" className="text-[#6C78DF] text-sm mt-2 block hover:underline">
+                Be the first to list your business
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {users.map((u) => (
+                <UserCard key={u.user_id} user={u} />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
@@ -100,9 +132,9 @@ function UserCard({ user }: { user: ListingUser }) {
     <Link href={href}>
       <div className="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
         {/* Cover */}
-        <div className="h-20 bg-gradient-to-r from-green-500 to-emerald-400 relative">
+        <div className="h-20 bg-gradient-to-r from-[#30337A] to-[#6C78DF] relative">
           {isPaid && (
-            <span className="absolute top-2 right-2 text-[10px] font-bold bg-yellow-400 text-yellow-900 px-2 py-0.5 rounded-full">
+            <span className="absolute top-2 right-2 text-[10px] font-bold bg-white text-[#30337A] px-2 py-0.5 rounded-full">
               ⭐ Pro
             </span>
           )}
@@ -114,18 +146,18 @@ function UserCard({ user }: { user: ListingUser }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-2xl bg-green-50">
+              <div className="w-full h-full flex items-center justify-center text-2xl bg-[#6C78DF]/10">
                 👤
               </div>
             )}
           </div>
 
           <div className="flex items-center gap-1.5 flex-wrap">
-            <h3 className="font-bold text-gray-900 text-base group-hover:text-blue-600 transition leading-tight">
+            <h3 className="font-bold text-gray-900 text-base group-hover:text-[#6C78DF] transition leading-tight">
               {user.name}
             </h3>
             {(user.cat_name) && (
-              <CheckCircle2 size={14} className="text-blue-500 flex-shrink-0" />
+              <CheckCircle2 size={14} className="text-[#6C78DF] flex-shrink-0" />
             )}
           </div>
 
@@ -156,7 +188,7 @@ function UserCard({ user }: { user: ListingUser }) {
             </span>
             {user.is_service != null && (
               <span className={`ml-auto px-2 py-0.5 rounded text-[10px] font-medium ${
-                user.is_service ? "bg-blue-50 text-blue-600" : "bg-orange-50 text-orange-600"
+                user.is_service ? "bg-[#6C78DF]/10 text-[#30337A]" : "bg-orange-50 text-orange-600"
               }`}>
                 {user.is_service ? "Service" : "Shop"}
               </span>

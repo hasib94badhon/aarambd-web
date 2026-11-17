@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Search, LayoutGrid } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import CategoryIndexSidebar from "@/components/categories/CategoryIndexSidebar";
 import { publicApi } from "@/lib/api";
 import { Category } from "@/lib/types";
 
@@ -190,37 +191,7 @@ export default function CategoriesPage() {
       </div>
 
       <div className="flex gap-4 items-start">
-        {/* Left: full category index, top to bottom */}
-        <aside className="hidden lg:block sticky top-20 self-start w-[240px] shrink-0 max-h-[calc(100vh-5.5rem)] overflow-y-auto bg-white rounded-xl border border-slate-100 shadow-sm">
-          <div className="px-3.5 py-3 text-xs font-bold uppercase tracking-wide text-slate-400 border-b border-slate-50 sticky top-0 bg-white">
-            All Categories
-          </div>
-          <div className="p-2">
-            {loading ? (
-              <div className="space-y-1.5 p-1">
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <Skeleton key={i} className="h-8 rounded-lg" />
-                ))}
-              </div>
-            ) : (
-              categories.map((cat) => (
-                <Link
-                  key={cat.cat_id}
-                  href={`/categories/${cat.cat_id}`}
-                  className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-slate-700 hover:bg-[#6C78DF]/10 hover:text-[#30337A] transition truncate"
-                >
-                  {cat.cat_logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={cat.cat_logo} alt="" className="w-5 h-5 rounded object-cover flex-shrink-0" />
-                  ) : (
-                    <span className="text-sm flex-shrink-0">{getCategoryEmoji(cat.cat_name)}</span>
-                  )}
-                  <span className="truncate">{cat.cat_name}</span>
-                </Link>
-              ))
-            )}
-          </div>
-        </aside>
+        <CategoryIndexSidebar />
 
         {/* Main grid */}
         <main className="flex-1 min-w-0">
