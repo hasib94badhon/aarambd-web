@@ -194,7 +194,7 @@ export default function BusinessDetailPage({ id, mode }: Props) {
 
               {/* Main row */}
               <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                <div className="relative flex-shrink-0">
+                <div className="relative flex-shrink-0 self-start">
                   <div className="w-28 h-28 rounded-2xl p-[2px] bg-white shadow-lg">
                     <div className="w-full h-full rounded-2xl overflow-hidden bg-[#30337A]">
                       {data.photo ? (
