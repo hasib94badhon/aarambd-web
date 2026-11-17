@@ -80,7 +80,7 @@ export default function ProfileHeader({ user }: { user: DashboardUser }) {
             </span>
           </div>
           {isPremium && (
-            <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-white/15 border border-white/25 rounded-full px-3 py-1">
+            <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-white/15 border border-white/25 rounded-full px-3 py-1 capitalize">
               <Crown size={12} /> {user.subscription_type}
             </span>
           )}

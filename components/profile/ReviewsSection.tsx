@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ThumbsUp, ThumbsDown, Loader2, User, CheckCircle } from "lucide-react";
+import { Star, Loader2, User, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
@@ -10,8 +10,9 @@ import { useAuthStore } from "@/store/authStore";
 
 interface ReviewSummary {
   total: number;
-  good_count: number;
-  bad_count: number;
+  avg_rating: number;
+  distribution: { "5": number; "4": number; "3": number; "2": number; "1": number };
+  top_tags: string[];
 }
 
 interface Review {
@@ -19,8 +20,9 @@ interface Review {
   reviewer_id: number;
   reviewer_name: string;
   reviewer_photo: string;
-  rating: "good" | "bad";
+  rating: number;
   comment: string;
+  tags: string[];
   created_at: string;
 }
 
@@ -28,15 +30,30 @@ interface Props {
   userId: string;
 }
 
+function Stars({ rating, size = 14 }: { rating: number; size?: number }) {
+  return (
+    <span className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <Star
+          key={n}
+          size={size}
+          className={n <= rating ? "text-amber-400 fill-amber-400" : "text-gray-200 fill-gray-200"}
+        />
+      ))}
+    </span>
+  );
+}
+
 export default function ReviewsSection({ userId }: Props) {
   const { user, isLoggedIn } = useAuthStore();
   const [summary, setSummary] = useState<ReviewSummary | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
-  const [myReview, setMyReview] = useState<{ rating: string } | null>(null);
+  const [myReview, setMyReview] = useState<{ rating: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [comment, setComment] = useState("");
-  const [selectedRating, setSelectedRating] = useState<"good" | "bad" | null>(null);
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -84,15 +101,17 @@ export default function ReviewsSection({ userId }: Props) {
       });
       setSubmitSuccess(true);
       setMyReview({ rating: selectedRating });
-      setSummary((prev) =>
-        prev
-          ? {
-              total: prev.total + 1,
-              good_count: selectedRating === "good" ? prev.good_count + 1 : prev.good_count,
-              bad_count: selectedRating === "bad" ? prev.bad_count + 1 : prev.bad_count,
-            }
-          : prev
-      );
+      setSummary((prev) => {
+        if (!prev) return prev;
+        const key = String(selectedRating) as keyof ReviewSummary["distribution"];
+        const newTotal = prev.total + 1;
+        return {
+          ...prev,
+          total: newTotal,
+          avg_rating: Math.round(((prev.avg_rating * prev.total + selectedRating) / newTotal) * 10) / 10,
+          distribution: { ...prev.distribution, [key]: prev.distribution[key] + 1 },
+        };
+      });
       setReviews((prev) => [
         {
           review_id: Date.now(),
@@ -101,6 +120,7 @@ export default function ReviewsSection({ userId }: Props) {
           reviewer_photo: "",
           rating: selectedRating,
           comment,
+          tags: [],
           created_at: new Date().toLocaleString(),
         },
         ...prev,
@@ -115,61 +135,52 @@ export default function ReviewsSection({ userId }: Props) {
     }
   };
 
-  const goodPct =
-    summary && summary.total > 0
-      ? Math.round((summary.good_count / summary.total) * 100)
-      : 0;
-
   return (
     <section className="mt-8">
       <h2 className="text-xl font-bold text-gray-900 mb-5">Reviews & Ratings</h2>
 
-      {/* Summary bar */}
+      {/* Summary */}
       {loading ? (
-        <Skeleton className="h-20 w-full rounded-xl mb-6" />
+        <Skeleton className="h-28 w-full rounded-xl mb-6" />
       ) : summary && summary.total > 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-6 flex flex-col sm:flex-row items-center gap-5">
-          {/* Score circle */}
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-6 flex flex-col sm:flex-row items-center gap-6">
+          {/* Average score */}
           <div className="flex-shrink-0 text-center">
-            <div
-              className={`text-4xl font-extrabold ${
-                goodPct >= 70 ? "text-blue-600" : goodPct >= 40 ? "text-yellow-500" : "text-red-500"
-              }`}
-            >
-              {goodPct}%
-            </div>
-            <p className="text-xs text-gray-400 mt-0.5">Positive</p>
+            <div className="text-4xl font-extrabold text-gray-900">{summary.avg_rating.toFixed(1)}</div>
+            <Stars rating={Math.round(summary.avg_rating)} size={13} />
+            <p className="text-xs text-gray-400 mt-1">{summary.total} review{summary.total !== 1 ? "s" : ""}</p>
           </div>
 
-          <div className="flex-1 w-full">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
-                <div
-                  className="bg-green-500 h-full rounded-full transition-all"
-                  style={{ width: `${goodPct}%` }}
-                />
-              </div>
-              <span className="text-xs text-gray-500 flex-shrink-0">
-                <ThumbsUp size={11} className="inline mr-1 text-green-500" />
-                {summary.good_count} good
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
-                <div
-                  className="bg-red-400 h-full rounded-full transition-all"
-                  style={{ width: `${100 - goodPct}%` }}
-                />
-              </div>
-              <span className="text-xs text-gray-500 flex-shrink-0">
-                <ThumbsDown size={11} className="inline mr-1 text-red-400" />
-                {summary.bad_count} bad
-              </span>
-            </div>
-            <p className="text-xs text-gray-400 mt-2">{summary.total} total reviews</p>
+          {/* Distribution bars */}
+          <div className="flex-1 w-full space-y-1.5">
+            {([5, 4, 3, 2, 1] as const).map((n) => {
+              const count = summary.distribution[String(n) as keyof ReviewSummary["distribution"]];
+              const pct = summary.total > 0 ? Math.round((count / summary.total) * 100) : 0;
+              return (
+                <div key={n} className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 w-3 flex-shrink-0">{n}</span>
+                  <Star size={11} className="text-amber-400 fill-amber-400 flex-shrink-0" />
+                  <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                    <div className="bg-amber-400 h-full rounded-full transition-all" style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="text-xs text-gray-400 w-6 text-right flex-shrink-0">{count}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       ) : null}
+
+      {/* Top tags */}
+      {summary && summary.top_tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-6">
+          {summary.top_tags.map((tag) => (
+            <span key={tag} className="text-xs font-medium text-[#30337A] bg-[#6C78DF]/10 border border-[#6C78DF]/20 rounded-full px-2.5 py-1">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Submit review form */}
       {!isSelf && isLoggedIn && !myReview && !submitSuccess && (
@@ -179,41 +190,40 @@ export default function ReviewsSection({ userId }: Props) {
             <p className="text-xs text-red-600 mb-3">{submitError}</p>
           )}
           <form onSubmit={handleSubmit} className="space-y-3">
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={() => setSelectedRating("good")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border transition ${
-                  selectedRating === "good"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-blue-400"
-                }`}
-              >
-                <ThumbsUp size={14} /> Good
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedRating("bad")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border transition ${
-                  selectedRating === "bad"
-                    ? "bg-red-500 text-white border-red-500"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-red-400"
-                }`}
-              >
-                <ThumbsDown size={14} /> Bad
-              </button>
+            <div
+              className="flex items-center gap-1"
+              onMouseLeave={() => setHoverRating(0)}
+            >
+              {[1, 2, 3, 4, 5].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setSelectedRating(n)}
+                  onMouseEnter={() => setHoverRating(n)}
+                  className="p-0.5"
+                >
+                  <Star
+                    size={24}
+                    className={
+                      n <= (hoverRating || selectedRating)
+                        ? "text-amber-400 fill-amber-400"
+                        : "text-gray-200 fill-gray-200"
+                    }
+                  />
+                </button>
+              ))}
             </div>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Optional comment…"
               rows={2}
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#6C78DF]/40"
             />
             <Button
               type="submit"
               disabled={!selectedRating || submitting}
-              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+              className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white gap-2"
             >
               {submitting ? <Loader2 size={14} className="animate-spin" /> : null}
               Submit Review
@@ -223,14 +233,14 @@ export default function ReviewsSection({ userId }: Props) {
       )}
 
       {(myReview || submitSuccess) && (
-        <div className="flex items-center gap-2 text-sm text-blue-700 bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-6">
+        <div className="flex items-center gap-2 text-sm text-[#30337A] bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-6">
           <CheckCircle size={16} /> You have reviewed this profile
         </div>
       )}
 
       {!isLoggedIn && (
         <p className="text-sm text-gray-400 mb-6">
-          <a href="/login" className="text-blue-600 hover:underline">Login</a> to leave a review
+          <a href="/login" className="text-[#6C78DF] hover:underline">Login</a> to leave a review
         </p>
       )}
 
@@ -270,26 +280,22 @@ function ReviewItem({ review }: { review: Review }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm font-semibold text-gray-900">{review.reviewer_name}</span>
-          <span
-            className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${
-              review.rating === "good"
-                ? "bg-green-50 text-blue-700"
-                : "bg-red-50 text-red-600"
-            }`}
-          >
-            {review.rating === "good" ? (
-              <ThumbsUp size={10} />
-            ) : (
-              <ThumbsDown size={10} />
-            )}{" "}
-            {review.rating}
-          </span>
+          <Stars rating={review.rating} size={11} />
           <span className="text-xs text-gray-400 ml-auto">
             {review.created_at?.split(" ").slice(1, 4).join(" ")}
           </span>
         </div>
+        {review.tags?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1.5">
+            {review.tags.map((tag) => (
+              <span key={tag} className="text-[10px] font-medium text-[#30337A] bg-[#6C78DF]/10 rounded-full px-2 py-0.5">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         {review.comment && (
-          <p className="text-sm text-gray-600 mt-1 leading-relaxed">{review.comment}</p>
+          <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">{review.comment}</p>
         )}
       </div>
     </div>
