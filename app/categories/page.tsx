@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Search, LayoutGrid } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { publicApi } from "@/lib/api";
@@ -40,7 +40,7 @@ function getCategoryEmoji(name: string): string {
 
 const GRADIENT_PAIRS = [
   "from-green-500 to-emerald-700",
-  "from-blue-500 to-indigo-700",
+  "from-[#6C78DF] to-[#30337A]",
   "from-orange-400 to-red-600",
   "from-purple-500 to-violet-700",
   "from-teal-400 to-cyan-600",
@@ -127,60 +127,122 @@ export default function CategoriesPage() {
   }, [query, tab, categories]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900">All Categories</h1>
-        <p className="text-gray-500 mt-1">
-          Browse {categories.length} categories across Bangladesh
-        </p>
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      {/* Banner */}
+      <div className="relative rounded-[28px] overflow-hidden mb-6 shadow-2xl shadow-[#6C78DF]/20">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF]" />
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, transparent 40%, #ffffff 40%, #ffffff 41%, transparent 41%), linear-gradient(135deg, transparent 60%, #ffffff 60%, #ffffff 61%, transparent 61%)",
+            backgroundSize: "200px 200px",
+          }}
+        />
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-16 -left-16 w-60 h-60 bg-[#6C78DF]/30 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+
+        <div className="relative p-6 sm:p-10">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-7 h-7 rounded-md bg-white flex items-center justify-center shadow-sm">
+              <LayoutGrid size={14} className="text-[#6C78DF]" />
+            </div>
+            <span className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">
+              Browse
+            </span>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+            All Categories
+          </h1>
+          <p className="text-sm sm:text-base text-white/70 mb-6">
+            Browse {categories.length} categories of businesses and services across Bangladesh
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 max-w-xl">
+            <div className="relative flex-1">
+              <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <Input
+                placeholder="Search categories…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="pl-10 h-11 rounded-xl border-0 bg-white text-slate-900 placeholder:text-slate-400"
+              />
+            </div>
+            <div className="flex gap-2">
+              {(["all", "service", "shop"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={`px-4 h-11 rounded-xl text-sm font-medium transition border whitespace-nowrap ${
+                    tab === t
+                      ? "bg-white text-[#30337A] border-white"
+                      : "bg-white/10 text-white border-white/20 hover:bg-white/15"
+                  }`}
+                >
+                  {t === "all" ? "All" : t === "service" ? "Services" : "Shops"}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
-        <div className="relative flex-1 max-w-sm">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <Input
-            placeholder="Filter categories…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="pl-9 rounded-full"
-          />
-        </div>
-        <div className="flex gap-2">
-          {(["all", "service", "shop"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition border ${
-                tab === t
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
-              }`}
-            >
-              {t === "all" ? "All" : t === "service" ? "Services" : "Shops"}
-            </button>
-          ))}
-        </div>
-      </div>
+      <div className="flex gap-4 items-start">
+        {/* Left: full category index, top to bottom */}
+        <aside className="hidden lg:block sticky top-20 self-start w-[240px] shrink-0 max-h-[calc(100vh-5.5rem)] overflow-y-auto bg-white rounded-xl border border-slate-100 shadow-sm">
+          <div className="px-3.5 py-3 text-xs font-bold uppercase tracking-wide text-slate-400 border-b border-slate-50 sticky top-0 bg-white">
+            All Categories
+          </div>
+          <div className="p-2">
+            {loading ? (
+              <div className="space-y-1.5 p-1">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <Skeleton key={i} className="h-8 rounded-lg" />
+                ))}
+              </div>
+            ) : (
+              categories.map((cat) => (
+                <Link
+                  key={cat.cat_id}
+                  href={`/categories/${cat.cat_id}`}
+                  className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-slate-700 hover:bg-[#6C78DF]/10 hover:text-[#30337A] transition truncate"
+                >
+                  {cat.cat_logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={cat.cat_logo} alt="" className="w-5 h-5 rounded object-cover flex-shrink-0" />
+                  ) : (
+                    <span className="text-sm flex-shrink-0">{getCategoryEmoji(cat.cat_name)}</span>
+                  )}
+                  <span className="truncate">{cat.cat_name}</span>
+                </Link>
+              ))
+            )}
+          </div>
+        </aside>
 
-      {/* Grid */}
-      {loading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 rounded-xl" />
-          ))}
-        </div>
-      ) : filtered.length === 0 ? (
-        <div className="text-center py-20 text-gray-400">
-          <p className="text-lg">No categories found</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {filtered.map((cat, idx) => (
-            <CategoryCard key={cat.cat_id} cat={cat} idx={idx} />
-          ))}
-        </div>
-      )}
+        {/* Main grid */}
+        <main className="flex-1 min-w-0">
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 20 }).map((_, i) => (
+                <Skeleton key={i} className="h-28 rounded-xl" />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-20 text-gray-400">
+              <p className="text-lg">No categories found</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filtered.map((cat, idx) => (
+                <CategoryCard key={cat.cat_id} cat={cat} idx={idx} />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
