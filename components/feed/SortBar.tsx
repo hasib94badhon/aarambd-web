@@ -29,7 +29,7 @@ export default function SortBar({ value, onChange, total }: Props) {
             onClick={() => onChange(o.value)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition ${
               value === o.value
-                ? "bg-white text-blue-700 shadow-sm"
+                ? "bg-white text-[#30337A] shadow-sm"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >

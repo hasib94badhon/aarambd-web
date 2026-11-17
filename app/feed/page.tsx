@@ -1,38 +1,38 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { LogIn, RefreshCw, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { RefreshCw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryFilterBar from "@/components/feed/CategoryFilterBar";
 import SortBar, { SortOption } from "@/components/feed/SortBar";
 import PostCard from "@/components/feed/PostCard";
 import PostDetailSheet from "@/components/feed/PostDetailSheet";
-import { api } from "@/lib/api";
+import RightSidebar from "@/components/home/RightSidebar";
+import { publicApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { Category, FeedPost } from "@/lib/types";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 
 export default function FeedPage() {
   const { isLoggedIn, hydrate } = useAuthStore();
   const [hydrated, setHydrated] = useState(false);
 
-  // Auth check
   useEffect(() => {
     hydrate();
     setHydrated(true);
   }, [hydrate]);
 
   if (!hydrated) return null;
-  if (!isLoggedIn) return <LoginPrompt />;
-  return <Feed />;
+  return <Feed isLoggedIn={isLoggedIn} />;
 }
 
-// ─── Feed (authenticated) ────────────────────────────────────────────────────
+// ─── Feed ────────────────────────────────────────────────────────────────────
 
-function Feed() {
+function Feed({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCat, setSelectedCat] = useState<number | null>(null);
   const [sort, setSort] = useState<SortOption>("recent");
@@ -48,7 +48,7 @@ function Feed() {
 
   // Load categories once
   useEffect(() => {
-    api
+    publicApi
       .get("/get_categories_name")
       .then((r) => setCategories(r.data.categories ?? []))
       .catch(() => {});
@@ -79,7 +79,7 @@ function Feed() {
         };
         if (selectedCat !== null) params.cat_id = selectedCat;
 
-        const { data } = await api.get("/get_today_post", { params });
+        const { data } = await publicApi.get("/get_today_post", { params });
         const newPosts: FeedPost[] = data.most_update_post ?? [];
 
         setPosts((prev) =>
@@ -110,6 +110,10 @@ function Feed() {
   };
 
   const openPost = (post: FeedPost) => {
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
     setActivePost(post);
     setSheetOpen(true);
   };
@@ -123,85 +127,91 @@ function Feed() {
         onChange={(id) => setSelectedCat(id)}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Sort bar */}
-        <SortBar value={sort} onChange={setSort} total={posts.length} />
+      <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+        <div className="flex gap-4 items-start">
+          <main className="flex-1 min-w-0 max-w-2xl mx-auto w-full">
+            {/* Sort bar */}
+            <SortBar value={sort} onChange={setSort} total={posts.length} />
 
-        {/* Initial skeleton */}
-        {initialLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <PostCardSkeleton key={i} />
-            ))}
-          </div>
-        )}
+            {/* Initial skeleton */}
+            {initialLoading && (
+              <div className="space-y-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <PostCardSkeleton key={i} />
+                ))}
+              </div>
+            )}
 
-        {/* Error state */}
-        {error && !initialLoading && (
-          <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
-            <p className="text-gray-400">Could not load posts.</p>
-            <Button
-              variant="outline"
-              onClick={() => fetchPosts(1)}
-              className="gap-2"
-            >
-              <RefreshCw size={14} /> Try again
-            </Button>
-          </div>
-        )}
-
-        {/* Empty state */}
-        {!initialLoading && !error && posts.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="text-5xl mb-4">📭</div>
-            <p className="text-gray-500 font-medium">No posts in this category yet</p>
-            <p className="text-sm text-gray-400 mt-1">
-              Try another category or check back later
-            </p>
-          </div>
-        )}
-
-        {/* Posts grid */}
-        {!initialLoading && posts.length > 0 && (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {posts.map((post) => (
-                <PostCard key={post.post_id} post={post} onClick={openPost} />
-              ))}
-            </div>
-
-            {/* Load more */}
-            <div className="flex justify-center mt-10">
-              {hasMore ? (
+            {/* Error state */}
+            {error && !initialLoading && (
+              <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
+                <p className="text-gray-400">Could not load posts.</p>
                 <Button
-                  onClick={loadMore}
-                  disabled={loading}
                   variant="outline"
-                  className="px-8 gap-2"
+                  onClick={() => fetchPosts(1)}
+                  className="gap-2"
                 >
-                  {loading ? (
-                    <Loader2 size={16} className="animate-spin" />
-                  ) : (
-                    "Load more posts"
-                  )}
+                  <RefreshCw size={14} /> Try again
                 </Button>
-              ) : (
-                <p className="text-sm text-gray-400 py-4">
-                  You&apos;ve seen all posts
-                </p>
-              )}
-            </div>
-          </>
-        )}
+              </div>
+            )}
 
-        {/* Loading more skeletons at bottom */}
-        {loading && !initialLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-5">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <PostCardSkeleton key={`more-${i}`} />
-            ))}
-          </div>
-        )}
+            {/* Empty state */}
+            {!initialLoading && !error && posts.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="text-5xl mb-4">📭</div>
+                <p className="text-gray-500 font-medium">No posts in this category yet</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Try another category or check back later
+                </p>
+              </div>
+            )}
+
+            {/* Posts — list view */}
+            {!initialLoading && posts.length > 0 && (
+              <>
+                <div className="space-y-4">
+                  {posts.map((post) => (
+                    <PostCard key={post.post_id} post={post} onClick={openPost} />
+                  ))}
+                </div>
+
+                {/* Load more */}
+                <div className="flex justify-center mt-10">
+                  {hasMore ? (
+                    <Button
+                      onClick={loadMore}
+                      disabled={loading}
+                      variant="outline"
+                      className="px-8 gap-2"
+                    >
+                      {loading ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        "Load more posts"
+                      )}
+                    </Button>
+                  ) : (
+                    <p className="text-sm text-gray-400 py-4">
+                      You&apos;ve seen all posts
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* Loading more skeletons at bottom */}
+            {loading && !initialLoading && (
+              <div className="space-y-4 mt-5">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <PostCardSkeleton key={`more-${i}`} />
+                ))}
+              </div>
+            )}
+          </main>
+
+          <RightSidebar isLoggedIn={isLoggedIn} />
+        </div>
       </div>
 
       {/* Post detail sheet */}
@@ -214,52 +224,12 @@ function Feed() {
   );
 }
 
-// ─── Login Prompt ────────────────────────────────────────────────────────────
-
-function LoginPrompt() {
-  return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 text-center gap-6">
-      <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center text-4xl">
-        📰
-      </div>
-      <div>
-        <h1 className="text-2xl font-extrabold text-gray-900 mb-2">
-          Sign in to view the Feed
-        </h1>
-        <p className="text-gray-500 max-w-sm">
-          The AaramBD feed shows latest posts and updates from businesses and
-          service providers across Bangladesh.
-        </p>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Link href="/login">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2 px-6">
-            <LogIn size={16} /> Sign In
-          </Button>
-        </Link>
-        <Link href="/register">
-          <Button variant="outline" className="px-6">
-            Create Free Account
-          </Button>
-        </Link>
-      </div>
-      <p className="text-xs text-gray-400 mt-2">
-        Or browse{" "}
-        <Link href="/categories" className="text-blue-600 hover:underline">
-          categories
-        </Link>{" "}
-        without signing in
-      </p>
-    </div>
-  );
-}
-
 // ─── Skeleton ────────────────────────────────────────────────────────────────
 
 function PostCardSkeleton() {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <Skeleton className="w-full h-48 rounded-none" />
+      <Skeleton className="w-full h-72 rounded-none" />
       <div className="p-4 space-y-3">
         <div className="flex gap-2 items-center">
           <Skeleton className="w-8 h-8 rounded-full" />

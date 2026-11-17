@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import CreateThought from "@/components/dashboard/CreateThought";
 import ThoughtDetailSheet from "@/components/feed/ThoughtDetailSheet";
+import RightSidebar from "@/components/home/RightSidebar";
 import { publicApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 
@@ -120,7 +121,9 @@ export default function ThoughtsPage() {
   if (!hydrated) return null;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      <div className="flex gap-4 items-start">
+      <main className="flex-1 min-w-0 max-w-3xl mx-auto w-full">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center">
@@ -148,7 +151,7 @@ export default function ThoughtsPage() {
             onClick={() => (isLoggedIn ? setComposerOpen(true) : router.push("/login"))}
             className="w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg hover:bg-gray-50 transition"
           >
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8990E8] to-[#30337A] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
               {isLoggedIn && user ? user.name?.charAt(0).toUpperCase() ?? "?" : <User size={16} />}
             </div>
             <span className="flex-1 text-sm text-gray-400 bg-gray-50 rounded-full px-4 py-2.5">
@@ -174,8 +177,8 @@ export default function ThoughtsPage() {
               onClick={() => setActiveCat(cat.des_cat_id)}
               className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition ${
                 activeCat === cat.des_cat_id
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-blue-400"
+                  ? "bg-[#6C78DF] text-white border-[#6C78DF]"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-[#6C78DF]"
               }`}
             >
               {cat.des_cat_name}
@@ -210,6 +213,10 @@ export default function ThoughtsPage() {
           )}
         </>
       )}
+      </main>
+
+      <RightSidebar isLoggedIn={isLoggedIn} />
+      </div>
 
       {/* Detail sheet */}
       {selectedId !== null && (
@@ -227,7 +234,7 @@ function ThoughtCard({ thought, onClick }: { thought: Thought; onClick: () => vo
   return (
     <button
       onClick={onClick}
-      className="text-left bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-green-200 transition-all overflow-hidden group"
+      className="text-left bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#6C78DF]/30 transition-all overflow-hidden group"
     >
       {thought.des_photo && (
         // eslint-disable-next-line @next/next/no-img-element
@@ -249,7 +256,7 @@ function ThoughtCard({ thought, onClick }: { thought: Thought; onClick: () => vo
         <div className="flex items-center gap-3 mt-3 text-xs text-gray-400">
           <span className="flex items-center gap-1"><Eye size={11} /> {thought.des_view ?? 0}</span>
           <span className="flex items-center gap-1"><MessageCircle size={11} /> {thought.des_com ?? 0}</span>
-          <span className="ml-auto flex items-center gap-0.5 text-blue-600 font-medium group-hover:gap-1.5 transition-all">
+          <span className="ml-auto flex items-center gap-0.5 text-[#6C78DF] font-medium group-hover:gap-1.5 transition-all">
             View <ChevronRight size={12} />
           </span>
         </div>

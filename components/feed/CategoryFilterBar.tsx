@@ -33,8 +33,8 @@ export default function CategoryFilterBar({ categories, selected, onChange }: Pr
             onClick={() => onChange(null)}
             className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition border ${
               selected === null
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                ? "bg-[#6C78DF] text-white border-[#6C78DF]"
+                : "bg-white text-gray-600 border-gray-200 hover:border-[#6C78DF] hover:text-[#6C78DF]"
             }`}
           >
             <LayoutGrid size={14} />
@@ -48,8 +48,8 @@ export default function CategoryFilterBar({ categories, selected, onChange }: Pr
               onClick={() => onChange(cat.cat_id)}
               className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition border whitespace-nowrap ${
                 selected === cat.cat_id
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                  ? "bg-[#6C78DF] text-white border-[#6C78DF]"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-[#6C78DF] hover:text-[#6C78DF]"
               }`}
             >
               {cat.cat_name}

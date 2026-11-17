@@ -50,7 +50,7 @@ export default function LoginPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <Link href="/">
-              <span className="text-3xl font-extrabold text-blue-600">AaramBD</span>
+              <span className="text-3xl font-extrabold text-[#6C78DF]">AaramBD</span>
             </Link>
             <h1 className="text-xl font-bold text-gray-900 mt-3">Welcome back</h1>
             <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
@@ -63,7 +63,7 @@ export default function LoginPage() {
               onClick={() => { setMode("password"); setError(""); }}
               className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
                 mode === "password"
-                  ? "bg-white shadow text-blue-700"
+                  ? "bg-white shadow text-[#30337A]"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -74,7 +74,7 @@ export default function LoginPage() {
               onClick={() => { setMode("secret"); setError(""); }}
               className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
                 mode === "secret"
-                  ? "bg-white shadow text-blue-700"
+                  ? "bg-white shadow text-[#30337A]"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -111,7 +111,7 @@ export default function LoginPage() {
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
                   <Label htmlFor="password">Password</Label>
-                  <Link href="/forgot-password" className="text-xs text-blue-600 hover:underline">
+                  <Link href="/forgot-password" className="text-xs text-[#6C78DF] hover:underline">
                     Forgot password?
                   </Link>
                 </div>
@@ -157,7 +157,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl"
+              className="w-full h-11 bg-[#6C78DF] hover:bg-[#5A64D4] text-white font-semibold rounded-xl"
             >
               {loading ? <Loader2 size={18} className="animate-spin" /> : "Sign In"}
             </Button>
@@ -165,7 +165,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-gray-500 mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-blue-600 font-medium hover:underline">
+            <Link href="/register" className="text-[#6C78DF] font-medium hover:underline">
               Create one free
             </Link>
           </p>

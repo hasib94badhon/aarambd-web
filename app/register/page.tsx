@@ -64,7 +64,7 @@ export default function RegisterPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <Link href="/">
-              <span className="text-3xl font-extrabold text-blue-600">Aarambd</span>
+              <span className="text-3xl font-extrabold text-[#6C78DF]">Aarambd</span>
             </Link>
             <h1 className="text-xl font-bold text-gray-900 mt-3">
               Create your account
@@ -176,7 +176,7 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl"
+              className="w-full h-11 bg-[#6C78DF] hover:bg-[#5A64D4] text-white font-semibold rounded-xl"
             >
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
@@ -190,7 +190,7 @@ export default function RegisterPage() {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-blue-600 font-medium hover:underline"
+              className="text-[#6C78DF] font-medium hover:underline"
             >
               Sign in
             </Link>

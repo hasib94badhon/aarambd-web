@@ -47,16 +47,16 @@ export default function ForBusinessPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white">
+      <section className="bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF] text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
           <h1 className="text-3xl sm:text-5xl font-extrabold mb-5">Grow Your Business with AaramBD</h1>
-          <p className="text-lg text-blue-200 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-white/80 max-w-2xl mx-auto mb-8">
             Join thousands of local businesses getting discovered by customers across Bangladesh —
             no upfront cost, no contracts.
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 bg-white text-blue-900 font-semibold px-6 py-3 rounded-xl hover:bg-blue-50 transition-all shadow-lg"
+            className="inline-flex items-center gap-2 bg-white text-[#30337A] font-semibold px-6 py-3 rounded-xl hover:bg-[#6C78DF]/10 transition-all shadow-lg"
           >
             List Your Business Free
           </Link>
@@ -69,7 +69,7 @@ export default function ForBusinessPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {STEPS.map((s, i) => (
             <div key={s.title} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-4">
+              <div className="w-11 h-11 rounded-xl bg-[#6C78DF]/10 flex items-center justify-center text-[#6C78DF] mb-4">
                 <s.icon size={22} />
               </div>
               <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">Step {i + 1}</p>
@@ -91,7 +91,7 @@ export default function ForBusinessPage() {
               <p className="text-sm text-slate-500">Real customer reviews and a verified badge once you're a subscriber.</p>
             </div>
             <div>
-              <TrendingUp className="mx-auto text-blue-600 mb-3" size={28} />
+              <TrendingUp className="mx-auto text-[#6C78DF] mb-3" size={28} />
               <h3 className="font-bold text-slate-900 mb-1">Reach More Customers</h3>
               <p className="text-sm text-slate-500">Show up in category browsing, search, and the community feed.</p>
             </div>
@@ -117,32 +117,32 @@ export default function ForBusinessPage() {
         ) : contact ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {contact.phone && (
-              <a href={`tel:${contact.phone}`} className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-blue-200 transition">
-                <Phone size={18} className="text-blue-600 flex-shrink-0" />
+              <a href={`tel:${contact.phone}`} className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-[#6C78DF] transition">
+                <Phone size={18} className="text-[#6C78DF] flex-shrink-0" />
                 <span className="text-sm font-medium text-slate-700">{contact.phone}</span>
               </a>
             )}
             {contact.email && (
-              <a href={`mailto:${contact.email}`} className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-blue-200 transition">
-                <Mail size={18} className="text-blue-600 flex-shrink-0" />
+              <a href={`mailto:${contact.email}`} className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-[#6C78DF] transition">
+                <Mail size={18} className="text-[#6C78DF] flex-shrink-0" />
                 <span className="text-sm font-medium text-slate-700">{contact.email}</span>
               </a>
             )}
             {contact.address && (
               <div className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-                <MapPin size={18} className="text-blue-600 flex-shrink-0" />
+                <MapPin size={18} className="text-[#6C78DF] flex-shrink-0" />
                 <span className="text-sm font-medium text-slate-700">{contact.address}</span>
               </div>
             )}
             {contact.website && (
-              <a href={contact.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-blue-200 transition">
-                <Globe size={18} className="text-blue-600 flex-shrink-0" />
+              <a href={contact.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-[#6C78DF] transition">
+                <Globe size={18} className="text-[#6C78DF] flex-shrink-0" />
                 <span className="text-sm font-medium text-slate-700 truncate">{contact.website}</span>
               </a>
             )}
             {contact.facebook && (
-              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-blue-200 transition">
-                <Globe size={18} className="text-blue-600 flex-shrink-0" />
+              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-[#6C78DF] transition">
+                <Globe size={18} className="text-[#6C78DF] flex-shrink-0" />
                 <span className="text-sm font-medium text-slate-700">Facebook Page</span>
               </a>
             )}

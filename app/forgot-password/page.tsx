@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <Link href="/">
-              <span className="text-3xl font-extrabold text-blue-600">Aarambd</span>
+              <span className="text-3xl font-extrabold text-[#6C78DF]">Aarambd</span>
             </Link>
             <h1 className="text-xl font-bold text-gray-900 mt-3">Reset Password</h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -95,10 +95,10 @@ export default function ForgotPasswordPage() {
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition ${
                     step === s
-                      ? "bg-blue-600 text-white"
+                      ? "bg-[#6C78DF] text-white"
                       : (step === "reset" && s === "verify") ||
                         step === "done"
-                      ? "bg-green-100 text-blue-600"
+                      ? "bg-green-100 text-[#6C78DF]"
                       : "bg-gray-100 text-gray-400"
                   }`}
                 >
@@ -110,7 +110,7 @@ export default function ForgotPasswordPage() {
                 </div>
                 <span
                   className={`text-xs ${
-                    step === s ? "text-blue-700 font-medium" : "text-gray-400"
+                    step === s ? "text-[#30337A] font-medium" : "text-gray-400"
                   }`}
                 >
                   {s === "verify" ? "Verify" : s === "reset" ? "New Password" : "Done"}
@@ -171,7 +171,7 @@ export default function ForgotPasswordPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl"
+                className="w-full h-11 bg-[#6C78DF] hover:bg-[#5A64D4] text-white font-semibold rounded-xl"
               >
                 {loading ? <Loader2 size={16} className="animate-spin" /> : "Verify Identity"}
               </Button>
@@ -233,7 +233,7 @@ export default function ForgotPasswordPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl"
+                className="w-full h-11 bg-[#6C78DF] hover:bg-[#5A64D4] text-white font-semibold rounded-xl"
               >
                 {loading ? (
                   <Loader2 size={16} className="animate-spin" />
@@ -247,7 +247,7 @@ export default function ForgotPasswordPage() {
           {/* Step 3 — Done */}
           {step === "done" && (
             <div className="text-center py-6">
-              <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-[#6C78DF]/10 flex items-center justify-center mx-auto mb-4">
                 <CheckCircle size={32} className="text-green-500" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 mb-2">
@@ -259,7 +259,7 @@ export default function ForgotPasswordPage() {
 
           <p className="text-center text-sm text-gray-500 mt-6">
             Remember your password?{" "}
-            <Link href="/login" className="text-blue-600 font-medium hover:underline">
+            <Link href="/login" className="text-[#6C78DF] font-medium hover:underline">
               Sign in
             </Link>
           </p>

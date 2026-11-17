@@ -6,6 +6,7 @@ import { Bookmark, User, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import RightSidebar from "@/components/home/RightSidebar";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 
@@ -76,25 +77,27 @@ export default function SavedPage() {
   if (!isLoggedIn) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-center px-4">
-        <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center">
-          <Bookmark size={24} className="text-blue-600" />
+        <div className="w-14 h-14 rounded-2xl bg-[#6C78DF]/10 flex items-center justify-center">
+          <Bookmark size={24} className="text-[#6C78DF]" />
         </div>
         <h2 className="text-xl font-bold text-gray-900">Your Saved List</h2>
         <p className="text-sm text-gray-400 max-w-xs">
           Login to see businesses you&apos;ve saved for quick access.
         </p>
         <Link href="/login">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">Login to Continue</Button>
+          <Button className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white">Login to Continue</Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      <div className="flex gap-4 items-start">
+      <main className="flex-1 min-w-0">
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-          <Bookmark size={20} className="text-blue-600" />
+        <div className="w-10 h-10 rounded-xl bg-[#6C78DF]/10 flex items-center justify-center">
+          <Bookmark size={20} className="text-[#6C78DF]" />
         </div>
         <div>
           <h1 className="text-2xl font-extrabold text-gray-900">Saved</h1>
@@ -106,17 +109,21 @@ export default function SavedPage() {
         <div className="text-center py-20">
           <Bookmark size={40} className="text-gray-200 mx-auto mb-3" />
           <p className="text-gray-400 text-sm">You haven&apos;t saved any businesses yet.</p>
-          <Link href="/businesses" className="text-blue-600 hover:underline text-sm mt-2 inline-block">
+          <Link href="/businesses" className="text-[#6C78DF] hover:underline text-sm mt-2 inline-block">
             Browse Businesses
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {profiles.map((p) => (
             <SavedCard key={p.user_id} profile={p} removing={removing === p.user_id} onRemove={handleRemove} />
           ))}
         </div>
       )}
+      </main>
+
+      <RightSidebar isLoggedIn={isLoggedIn} />
+      </div>
     </div>
   );
 }

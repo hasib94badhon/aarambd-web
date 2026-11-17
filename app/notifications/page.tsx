@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Bell, User, Eye, Phone, MessageCircle, Share2, Star, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import RightSidebar from "@/components/home/RightSidebar";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 
@@ -23,8 +24,8 @@ interface Notification {
 }
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
-  view: <Eye size={14} className="text-blue-500" />,
-  call: <Phone size={14} className="text-blue-600" />,
+  view: <Eye size={14} className="text-[#6C78DF]" />,
+  call: <Phone size={14} className="text-[#6C78DF]" />,
   comment: <MessageCircle size={14} className="text-purple-500" />,
   share: <Share2 size={14} className="text-orange-500" />,
   review: <Star size={14} className="text-yellow-500" />,
@@ -95,13 +96,13 @@ export default function NotificationsPage() {
   if (!isLoggedIn) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-center px-4">
-        <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center">
-          <Bell size={24} className="text-blue-600" />
+        <div className="w-14 h-14 rounded-2xl bg-[#6C78DF]/10 flex items-center justify-center">
+          <Bell size={24} className="text-[#6C78DF]" />
         </div>
         <h2 className="text-xl font-bold text-gray-900">Notifications</h2>
         <p className="text-sm text-gray-400 max-w-xs">Login to see your notifications.</p>
         <Link href="/login">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">Login to Continue</Button>
+          <Button className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white">Login to Continue</Button>
         </Link>
       </div>
     );
@@ -120,10 +121,12 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      <div className="flex gap-4 items-start">
+      <main className="flex-1 min-w-0 max-w-2xl mx-auto w-full">
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-          <Bell size={20} className="text-blue-600" />
+        <div className="w-10 h-10 rounded-xl bg-[#6C78DF]/10 flex items-center justify-center">
+          <Bell size={20} className="text-[#6C78DF]" />
         </div>
         <div className="flex-1">
           <h1 className="text-2xl font-extrabold text-gray-900">Notifications</h1>
@@ -134,7 +137,7 @@ export default function NotificationsPage() {
         {unreadCount > 0 && (
           <button
             onClick={markAllRead}
-            className="text-xs font-medium text-blue-600 hover:text-green-800 transition"
+            className="text-xs font-medium text-[#6C78DF] hover:text-[#30337A] transition"
           >
             Mark all read
           </button>
@@ -168,6 +171,10 @@ export default function NotificationsPage() {
           )}
         </>
       )}
+      </main>
+
+      <RightSidebar isLoggedIn={isLoggedIn} />
+      </div>
     </div>
   );
 }
@@ -181,7 +188,7 @@ function NotifItem({ notif }: { notif: Notification }) {
   return (
     <div
       className={`flex items-start gap-3 rounded-xl px-4 py-3 border transition ${
-        notif.is_read ? "bg-white border-gray-100" : "bg-blue-50 border-blue-100"
+        notif.is_read ? "bg-white border-gray-100" : "bg-[#6C78DF]/10 border-[#6C78DF]/20"
       }`}
     >
       <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 flex items-center justify-center">
@@ -198,12 +205,12 @@ function NotifItem({ notif }: { notif: Notification }) {
           {icon}
           <Link
             href={`/profile/${notif.user_id}`}
-            className="text-sm font-semibold text-gray-900 hover:text-blue-700 transition truncate"
+            className="text-sm font-semibold text-gray-900 hover:text-[#30337A] transition truncate"
           >
             {notif.user_name}
           </Link>
           {!notif.is_read && (
-            <span className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-[#6C78DF] flex-shrink-0" />
           )}
         </div>
         <p className="text-xs text-gray-600 mt-0.5">{notif.message}</p>

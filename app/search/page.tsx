@@ -7,6 +7,8 @@ import { Search, MapPin, Eye, Phone, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import RightSidebar from "@/components/home/RightSidebar";
+import { useAuthStore } from "@/store/authStore";
 import { publicApi } from "@/lib/api";
 
 interface SearchUser {
@@ -38,6 +40,7 @@ function SearchResults() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { isLoggedIn } = useAuthStore();
 
   useEffect(() => {
     setQuery(q);
@@ -56,7 +59,9 @@ function SearchResults() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      <div className="flex gap-4 items-start">
+        <main className="flex-1 min-w-0">
       {/* Search bar */}
       <form onSubmit={handleSearch} className="flex gap-3 max-w-2xl mb-8">
         <div className="relative flex-1">
@@ -70,7 +75,7 @@ function SearchResults() {
         </div>
         <button
           type="submit"
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-semibold transition"
+          className="px-6 py-2 bg-[#6C78DF] hover:bg-[#5A64D4] text-white rounded-full text-sm font-semibold transition"
         >
           Search
         </button>
@@ -101,7 +106,7 @@ function SearchResults() {
           <p className="text-sm mt-2 mb-6">Try a different search term or browse by category</p>
           <Link
             href="/categories"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#6C78DF] text-white rounded-xl text-sm font-semibold hover:bg-[#5A64D4] transition"
           >
             Browse All Categories
           </Link>
@@ -117,7 +122,7 @@ function SearchResults() {
               <button
                 key={tag}
                 onClick={() => router.push(`/search?q=${encodeURIComponent(tag)}`)}
-                className="px-4 py-1.5 bg-gray-100 hover:bg-green-50 hover:text-blue-700 text-gray-600 rounded-full text-sm transition"
+                className="px-4 py-1.5 bg-gray-100 hover:bg-[#6C78DF]/10 hover:text-[#30337A] text-gray-600 rounded-full text-sm transition"
               >
                 {tag}
               </button>
@@ -131,6 +136,10 @@ function SearchResults() {
           ))}
         </div>
       )}
+        </main>
+
+        <RightSidebar isLoggedIn={isLoggedIn} />
+      </div>
     </div>
   );
 }
@@ -143,7 +152,7 @@ function ResultCard({ user }: { user: SearchUser }) {
     <Link href={href}>
       <div className="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 p-4 flex gap-4">
         {/* Avatar */}
-        <div className="w-16 h-16 rounded-xl overflow-hidden bg-blue-50 flex-shrink-0 flex items-center justify-center">
+        <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#6C78DF]/10 flex-shrink-0 flex items-center justify-center">
           {user.photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
@@ -155,11 +164,11 @@ function ResultCard({ user }: { user: SearchUser }) {
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition truncate text-sm">
+            <h3 className="font-bold text-gray-900 group-hover:text-[#30337A] transition truncate text-sm">
               {user.name}
             </h3>
             {isPaid && <span className="text-[10px] bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded font-semibold flex-shrink-0">Pro</span>}
-            {user.cat_name && <CheckCircle2 size={13} className="text-blue-500 flex-shrink-0" />}
+            {user.cat_name && <CheckCircle2 size={13} className="text-[#6C78DF] flex-shrink-0" />}
           </div>
 
           {user.cat_name && (
@@ -185,7 +194,7 @@ function ResultCard({ user }: { user: SearchUser }) {
             <span className="flex items-center gap-1"><Phone size={10} /> {user.user_called}</span>
             {user.is_service != null && (
               <span className={`ml-auto px-2 py-0.5 rounded text-[10px] font-medium ${
-                user.is_service ? "bg-blue-50 text-blue-600" : "bg-orange-50 text-orange-600"
+                user.is_service ? "bg-[#6C78DF]/10 text-[#30337A]" : "bg-orange-50 text-orange-600"
               }`}>
                 {user.is_service ? "Service" : "Shop"}
               </span>

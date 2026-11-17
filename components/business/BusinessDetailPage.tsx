@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft, Eye, Phone, Share2, MapPin, MessageCircle,
-  Clock, CheckCircle2, Navigation, Check, Bookmark, BookmarkCheck,
+  Clock, BadgeCheck, Crown, Navigation, Check, Bookmark, BookmarkCheck, QrCode,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { api, publicApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import ReviewsSection from "@/components/profile/ReviewsSection";
+import RightSidebar from "@/components/home/RightSidebar";
 
 interface Post {
   post_id: string;
@@ -137,7 +138,7 @@ export default function BusinessDetailPage({ id, mode }: Props) {
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-center px-4">
         <div className="text-6xl">😕</div>
         <h2 className="text-2xl font-bold text-gray-900">Not Found</h2>
-        <Link href={mode === "service" ? "/services" : "/businesses"} className="text-blue-600 hover:underline text-sm">
+        <Link href={mode === "service" ? "/services" : "/businesses"} className="text-[#6C78DF] hover:underline text-sm">
           Browse {mode === "service" ? "Services" : "Businesses"}
         </Link>
       </div>
@@ -148,161 +149,195 @@ export default function BusinessDetailPage({ id, mode }: Props) {
   const isPaid = data.type === "paid";
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <Link
-        href={mode === "service" ? "/services" : "/businesses"}
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 mb-6 transition"
-      >
-        <ArrowLeft size={16} /> Back to {mode === "service" ? "Services" : "Businesses"}
-      </Link>
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      <div className="flex gap-4 items-start">
+        <main className="flex-1 min-w-0 max-w-3xl mx-auto w-full">
+          <Link
+            href={mode === "service" ? "/services" : "/businesses"}
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#6C78DF] mb-6 transition"
+          >
+            <ArrowLeft size={16} /> Back to {mode === "service" ? "Services" : "Businesses"}
+          </Link>
 
-      {/* Profile card */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-8">
-        <div className="h-44 sm:h-64 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 relative">
-          {isPaid && (
-            <span className="absolute top-3 right-3 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full">
-              ⭐ Pro
-            </span>
-          )}
-        </div>
+          {/* V-card */}
+          <div className="relative rounded-[28px] overflow-hidden shadow-2xl shadow-[#6C78DF]/20 mb-8">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF]" />
+            <div
+              className="absolute inset-0 opacity-[0.06]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, transparent 40%, #ffffff 40%, #ffffff 41%, transparent 41%), linear-gradient(135deg, transparent 60%, #ffffff 60%, #ffffff 61%, transparent 61%)",
+                backgroundSize: "200px 200px",
+              }}
+            />
+            <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+            <div className="absolute -bottom-16 -left-16 w-60 h-60 bg-[#6C78DF]/30 rounded-full blur-3xl" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
-        <div className="px-6 pb-6 -mt-16">
-          <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-            <div className="w-32 h-32 rounded-full border-4 border-white overflow-hidden bg-gray-100 shadow-xl flex-shrink-0">
-              {data.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={data.photo} alt={data.name} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-5xl bg-green-50">👤</div>
-              )}
-            </div>
-
-            <div className="flex-1 pt-2 sm:pt-10">
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl font-extrabold text-gray-900">{data.name}</h1>
-                <span className="flex items-center gap-1 text-xs bg-blue-50 text-blue-600 border border-blue-100 rounded-full px-2 py-0.5 font-medium">
-                  <CheckCircle2 size={12} /> Verified
-                </span>
+            <div className="relative p-6 sm:p-8">
+              {/* Brand row */}
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-md bg-white flex items-center justify-center shadow-sm">
+                    <span className="text-[#6C78DF] font-black text-xs">A</span>
+                  </div>
+                  <span className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">
+                    {mode === "service" ? "Service Card" : "Shop Card"}
+                  </span>
+                </div>
+                {isPaid && (
+                  <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-white/15 border border-white/25 rounded-full px-3 py-1">
+                    <Crown size={12} /> Pro
+                  </span>
+                )}
               </div>
-              <div className="flex flex-wrap items-center gap-2 mt-1">
-                {data.cat_name && <Badge variant="secondary">{data.cat_name}</Badge>}
-                <Badge variant="outline" className="capitalize">{mode}</Badge>
+
+              {/* Main row */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+                <div className="relative flex-shrink-0">
+                  <div className="w-28 h-28 rounded-2xl p-[2px] bg-white shadow-lg">
+                    <div className="w-full h-full rounded-2xl overflow-hidden bg-[#30337A]">
+                      {data.photo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={data.photo} alt={data.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-4xl text-white/60">
+                          {data.name?.charAt(0).toUpperCase() ?? "?"}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-white border-2 border-[#30337A] flex items-center justify-center">
+                    <BadgeCheck size={14} className="text-[#6C78DF]" />
+                  </div>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight truncate">
+                    {data.name}
+                  </h1>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
+                    {data.cat_name && (
+                      <span className="text-sm font-medium text-white/80 italic">{data.cat_name}</span>
+                    )}
+                    <Badge variant="outline" className="capitalize border-white/25 text-white/80 text-[10px]">{mode}</Badge>
+                    {data.location && (
+                      <span className="flex items-center gap-1 text-xs text-white/55">
+                        <MapPin size={12} /> {data.location}
+                      </span>
+                    )}
+                  </div>
+                  {data.distance && data.distance !== "Distance not available" && (
+                    <p className="flex items-center gap-1 text-xs text-white/70 mt-1.5 font-medium">
+                      <Navigation size={11} /> {data.distance}
+                    </p>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="flex flex-wrap gap-2 flex-shrink-0">
+                  {data.call_status === 1 && (
+                    <a
+                      href={`tel:${data.phone}`}
+                      onClick={handleCall}
+                      className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-white hover:bg-white/90 text-[#30337A] rounded-xl px-4 py-2.5 transition whitespace-nowrap"
+                    >
+                      <Phone size={13} /> Call
+                    </a>
+                  )}
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-white/10 hover:bg-white/15 text-white border border-white/20 rounded-xl px-4 py-2.5 transition whitespace-nowrap"
+                  >
+                    {copied ? <Check size={13} /> : <Share2 size={13} />}
+                    {copied ? "Copied!" : "Share"}
+                  </button>
+                  {isLoggedIn && !isSelf && (
+                    <button
+                      onClick={handleSaveToggle}
+                      disabled={savingToggle}
+                      className="flex items-center justify-center gap-1.5 text-xs font-semibold bg-white/10 hover:bg-white/15 text-white border border-white/20 rounded-xl px-4 py-2.5 transition whitespace-nowrap"
+                    >
+                      {saved ? <BookmarkCheck size={13} /> : <Bookmark size={13} />}
+                      {saved ? "Saved" : "Save"}
+                    </button>
+                  )}
+                </div>
               </div>
-              {data.location && (
-                <p className="flex items-center gap-1 text-sm text-gray-400 mt-2">
-                  <MapPin size={13} /> {data.location}
+
+              {/* Description */}
+              {data.description && (
+                <p className="mt-5 text-sm text-white/80 leading-relaxed max-w-2xl border-l-2 border-white/25 pl-3">
+                  {data.description}
                 </p>
               )}
-              {data.distance && data.distance !== "Distance not available" && (
-                <p className="flex items-center gap-1 text-xs text-blue-600 mt-1 font-medium">
-                  <Navigation size={11} /> {data.distance}
+
+              {data.address && data.address !== "Location not detected" && (
+                <p className="flex items-center gap-1.5 text-xs text-white/55 mt-3">
+                  <MapPin size={12} /> {data.address}
                 </p>
               )}
-            </div>
 
-            {/* Actions */}
-            <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
-              {data.call_status === 1 && (
-                <a
-                  href={`tel:${data.phone}`}
-                  onClick={handleCall}
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition"
+              <div className="mt-6 border-t border-white/15" />
+
+              {/* Stats */}
+              <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-3">
+                {[
+                  { icon: Eye, label: "Views", value: data.user_viewed },
+                  { icon: Phone, label: "Calls", value: data.user_called },
+                  { icon: Share2, label: "Shares", value: data.user_shared },
+                  { icon: MessageCircle, label: "Posts", value: data.total_posts },
+                ].map((s) => (
+                  <div key={s.label} className="flex items-center gap-2">
+                    <s.icon size={14} className="text-white/70" />
+                    <span className="text-base font-bold text-white tabular-nums">{s.value ?? 0}</span>
+                    <span className="text-xs text-white/55">{s.label}</span>
+                  </div>
+                ))}
+                <Link
+                  href={`/profile/${data.user_id}`}
+                  className="ml-auto flex items-center gap-1.5 text-[10px] text-white/70 hover:text-white tracking-widest uppercase transition"
                 >
-                  <Phone size={15} /> Call
-                </a>
-              )}
-              <button
-                onClick={handleShare}
-                className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-xl transition"
-              >
-                {copied ? <Check size={15} className="text-blue-600" /> : <Share2 size={15} />}
-                {copied ? "Copied!" : "Share"}
-              </button>
-              {isLoggedIn && !isSelf && (
-                <button
-                  onClick={handleSaveToggle}
-                  disabled={savingToggle}
-                  className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl border transition ${
-                    saved
-                      ? "bg-blue-50 border-blue-300 text-blue-700 hover:bg-red-50 hover:border-red-300 hover:text-red-600"
-                      : "bg-white border-gray-200 text-gray-600 hover:border-blue-400 hover:text-blue-700"
-                  }`}
-                >
-                  {saved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
-                  {saved ? "Saved" : "Save"}
-                </button>
-              )}
+                  <QrCode size={12} />
+                  Full profile →
+                </Link>
+              </div>
             </div>
           </div>
 
-          {data.description && (
-            <p className="mt-5 text-sm text-gray-600 leading-relaxed max-w-2xl">{data.description}</p>
+          {/* Posts — list view, picture big, text below */}
+          {data.posts?.length > 0 && (
+            <section className="mb-8">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-sm font-bold text-slate-900">Posts &amp; Updates</h2>
+                <div className="flex gap-1">
+                  {["recent", "most_viewed", "most_commented"].map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => handleSortChange(s)}
+                      className={`text-xs px-3 py-1.5 rounded-lg font-medium transition ${
+                        sortBy === s ? "bg-[#6C78DF] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                    >
+                      {s === "recent" ? "Recent" : s === "most_viewed" ? "Most Viewed" : "Most Commented"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4">
+                {data.posts.map((post) => (
+                  <PostCard key={post.post_id} post={post} />
+                ))}
+              </div>
+            </section>
           )}
 
-          {data.address && data.address !== "Location not detected" && (
-            <p className="flex items-center gap-1.5 text-xs text-gray-400 mt-3">
-              <MapPin size={12} /> {data.address}
-            </p>
-          )}
+          {/* Reviews */}
+          <ReviewsSection userId={String(data.user_id)} />
+        </main>
 
-          {/* Stats */}
-          <div className="mt-5 flex flex-wrap gap-5 text-sm">
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <Eye size={14} className="text-gray-400" />
-              <span className="font-semibold text-gray-700">{data.user_viewed}</span> Views
-            </div>
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <Phone size={14} className="text-gray-400" />
-              <span className="font-semibold text-gray-700">{data.user_called}</span> Calls
-            </div>
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <Share2 size={14} className="text-gray-400" />
-              <span className="font-semibold text-gray-700">{data.user_shared}</span> Shares
-            </div>
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <MessageCircle size={14} className="text-gray-400" />
-              <span className="font-semibold text-gray-700">{data.total_posts}</span> Posts
-            </div>
-          </div>
-
-          {/* Public profile link */}
-          <div className="mt-4">
-            <Link href={`/profile/${data.user_id}`} className="text-xs text-blue-600 hover:underline">
-              View full profile →
-            </Link>
-          </div>
-        </div>
+        <RightSidebar isLoggedIn={isLoggedIn} />
       </div>
-
-      {/* Posts */}
-      {data.posts?.length > 0 && (
-        <section className="mb-8">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xl font-bold text-gray-900">Posts & Updates</h2>
-            <div className="flex gap-1">
-              {["recent", "most_viewed", "most_commented"].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => handleSortChange(s)}
-                  className={`text-xs px-3 py-1.5 rounded-lg font-medium transition ${
-                    sortBy === s ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  {s === "recent" ? "Recent" : s === "most_viewed" ? "Most Viewed" : "Most Commented"}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {data.posts.map((post) => (
-              <PostCard key={post.post_id} post={post} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Reviews */}
-      <ReviewsSection userId={String(data.user_id)} />
     </div>
   );
 }
@@ -313,13 +348,13 @@ function PostCard({ post }: { post: Post }) {
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
       {img && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={img} alt="post" className="w-full h-44 object-cover" />
+        <img src={img} alt="post" className="w-full h-64 sm:h-80 object-cover" />
       )}
       <div className="p-4">
         {post.post_main_description && (
-          <p className="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">{post.post_main_description}</p>
+          <p className="text-sm font-semibold text-gray-900 mb-1">{post.post_main_description}</p>
         )}
-        <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">{post.post_des}</p>
+        <p className="text-sm text-gray-600 leading-relaxed">{post.post_des}</p>
         <Separator className="my-3" />
         <div className="flex items-center justify-between text-xs text-gray-400">
           <span className="flex items-center gap-1"><Clock size={11} /> {post.post_time?.split(" ").slice(1, 4).join(" ")}</span>
@@ -335,19 +370,21 @@ function PostCard({ post }: { post: Post }) {
 
 function DetailSkeleton() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
-      <Skeleton className="h-5 w-24 mb-4" />
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <Skeleton className="h-64 rounded-none" />
-        <div className="px-6 pb-6 space-y-3 -mt-16">
-          <Skeleton className="w-32 h-32 rounded-full" />
-          <Skeleton className="h-7 w-48" />
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-16 w-full max-w-xl" />
+    <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6">
+      <div className="max-w-3xl mx-auto w-full space-y-6">
+        <Skeleton className="h-5 w-24 mb-4" />
+        <div className="rounded-[28px] bg-gradient-to-br from-[#14163A] via-[#30337A] to-[#6C78DF] p-8">
+          <div className="flex items-center gap-6">
+            <Skeleton className="w-28 h-28 rounded-2xl bg-white/15" />
+            <div className="flex-1 space-y-3">
+              <Skeleton className="h-7 w-48 bg-white/15" />
+              <Skeleton className="h-4 w-32 bg-white/15" />
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {[1, 2].map((i) => <Skeleton key={i} className="h-52 rounded-xl" />)}
+        <div className="space-y-4">
+          {[1, 2].map((i) => <Skeleton key={i} className="h-64 rounded-xl" />)}
+        </div>
       </div>
     </div>
   );

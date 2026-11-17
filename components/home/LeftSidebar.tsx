@@ -93,7 +93,7 @@ export default function LeftSidebar({
             href="/dashboard"
             className="flex items-center gap-2.5 px-1 py-1 rounded-lg hover:bg-slate-50 transition"
           >
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8990E8] to-[#30337A] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
               {user.name?.charAt(0).toUpperCase() ?? "?"}
             </div>
             <span className="text-sm font-semibold text-slate-800 truncate">{user.name}</span>
@@ -101,7 +101,7 @@ export default function LeftSidebar({
         ) : (
           <Link
             href="/login"
-            className="flex items-center gap-2.5 px-1 py-1.5 rounded-lg hover:bg-slate-50 transition text-blue-600"
+            className="flex items-center gap-2.5 px-1 py-1.5 rounded-lg hover:bg-slate-50 transition text-[#6C78DF]"
           >
             <LogIn size={18} />
             <span className="text-sm font-semibold">Sign in</span>
@@ -115,7 +115,7 @@ export default function LeftSidebar({
           <Link
             key={l.href}
             href={l.href}
-            className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all"
+            className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-[#6C78DF]/10 hover:text-[#30337A] transition-all"
           >
             <l.icon size={18} className="text-slate-500" />
             {l.label}
@@ -125,21 +125,21 @@ export default function LeftSidebar({
           <>
             <Link
               href="/saved"
-              className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all"
+              className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-[#6C78DF]/10 hover:text-[#30337A] transition-all"
             >
               <Bookmark size={18} className="text-slate-500" />
               Saved
             </Link>
             <Link
               href="/notifications"
-              className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all"
+              className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-[#6C78DF]/10 hover:text-[#30337A] transition-all"
             >
               <Bell size={18} className="text-slate-500" />
               Notifications
             </Link>
             <Link
               href="/dashboard"
-              className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all"
+              className="flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-[#6C78DF]/10 hover:text-[#30337A] transition-all"
             >
               <UserIcon size={18} className="text-slate-500" />
               Dashboard
@@ -171,7 +171,7 @@ export default function LeftSidebar({
                   }}
                   className={`w-full text-left flex items-center px-2.5 py-2 rounded-lg text-sm font-medium transition-all ${
                     activeCat === cat.des_cat_id
-                      ? "bg-blue-50 text-blue-700"
+                      ? "bg-[#6C78DF]/10 text-[#30337A]"
                       : "text-slate-700 hover:bg-slate-50"
                   }`}
                 >
@@ -183,8 +183,8 @@ export default function LeftSidebar({
                       onClick={() => onSelectSubCat(null)}
                       className={`text-xs px-2 py-1 rounded-full border transition-all ${
                         activeSubCat === null
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white text-slate-500 border-slate-200 hover:border-blue-300"
+                          ? "bg-[#6C78DF] text-white border-[#6C78DF]"
+                          : "bg-white text-slate-500 border-slate-200 hover:border-[#6C78DF]"
                       }`}
                     >
                       All
@@ -195,8 +195,8 @@ export default function LeftSidebar({
                         onClick={() => onSelectSubCat(sc.des_sub_cat_id)}
                         className={`text-xs px-2 py-1 rounded-full border transition-all ${
                           activeSubCat === sc.des_sub_cat_id
-                            ? "bg-blue-600 text-white border-blue-600"
-                            : "bg-white text-slate-500 border-slate-200 hover:border-blue-300"
+                            ? "bg-[#6C78DF] text-white border-[#6C78DF]"
+                            : "bg-white text-slate-500 border-slate-200 hover:border-[#6C78DF]"
                         }`}
                       >
                         {sc.emoji ? `${sc.emoji} ` : ""}

@@ -81,7 +81,7 @@ export default function SocialPage() {
                     key={t.key}
                     onClick={() => setTab(t.key)}
                     className={`flex-1 text-xs font-medium px-2 py-1.5 rounded-lg border transition ${
-                      tab === t.key ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
+                      tab === t.key ? "bg-[#6C78DF] text-white border-[#6C78DF]" : "bg-white text-gray-600 border-gray-200 hover:border-[#6C78DF]"
                     }`}
                   >
                     {t.label}
@@ -100,7 +100,7 @@ export default function SocialPage() {
                   <button
                     onClick={() => setSelectedCat(null)}
                     className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition ${
-                      !selectedCat ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-50"
+                      !selectedCat ? "bg-[#6C78DF]/10 text-[#30337A] font-medium" : "text-gray-600 hover:bg-gray-50"
                     }`}
                   >
                     All categories
@@ -110,7 +110,7 @@ export default function SocialPage() {
                       key={c}
                       onClick={() => setSelectedCat(selectedCat === c ? null : c)}
                       className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition truncate ${
-                        selectedCat === c ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-50"
+                        selectedCat === c ? "bg-[#6C78DF]/10 text-[#30337A] font-medium" : "text-gray-600 hover:bg-gray-50"
                       }`}
                     >
                       {c}
@@ -153,14 +153,14 @@ export default function SocialPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackVisit(item)}
-                  className="flex items-center gap-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all p-4"
+                  className="flex items-center gap-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#6C78DF] transition-all p-4"
                 >
                   <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0">
                     {item.photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={item.photo} alt="" className="w-full h-full object-cover" />
                     ) : item.kind === "fb" ? (
-                      <Globe size={18} className="text-blue-600" />
+                      <Globe size={18} className="text-[#6C78DF]" />
                     ) : (
                       <PlayCircle size={18} className="text-red-600" />
                     )}

@@ -66,11 +66,11 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center gap-2 mr-1">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+            <div className="w-8 h-8 bg-[#6C78DF] rounded-lg flex items-center justify-center shadow-sm">
               <span className="text-white font-extrabold text-sm leading-none">A</span>
             </div>
             <span className="text-xl font-extrabold text-slate-900 tracking-tight">
-              Aaram<span className="text-blue-600">BD</span>
+              Aaram<span className="text-[#6C78DF]">BD</span>
             </span>
           </Link>
 
@@ -93,17 +93,17 @@ export default function Navbar() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-all"
+                className="text-sm font-medium text-slate-600 hover:text-[#30337A] hover:bg-[#6C78DF]/10 px-3 py-2 rounded-lg transition-all"
               >
                 {l.label}
               </Link>
             ))}
             {isLoggedIn && (
               <>
-                <Link href="/feed" className="text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-all">
+                <Link href="/feed" className="text-sm font-medium text-slate-600 hover:text-[#30337A] hover:bg-[#6C78DF]/10 px-3 py-2 rounded-lg transition-all">
                   Feed
                 </Link>
-                <Link href="/thoughts" className="text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-all">
+                <Link href="/thoughts" className="text-sm font-medium text-slate-600 hover:text-[#30337A] hover:bg-[#6C78DF]/10 px-3 py-2 rounded-lg transition-all">
                   Thoughts
                 </Link>
               </>
@@ -111,14 +111,14 @@ export default function Navbar() {
 
             <Link
               href="/for-business"
-              className="text-sm font-semibold text-blue-700 border border-blue-200 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-all ml-1"
+              className="text-sm font-semibold text-[#30337A] border border-[#6C78DF]/20 hover:bg-[#6C78DF]/10 px-3 py-1.5 rounded-lg transition-all ml-1"
             >
               For Business
             </Link>
 
             {isLoggedIn ? (
               <div className="flex items-center gap-1 ml-2 pl-2 border-l border-slate-200">
-                <Link href="/notifications" className="relative p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-all">
+                <Link href="/notifications" className="relative p-2 rounded-lg text-slate-500 hover:text-[#30337A] hover:bg-[#6C78DF]/10 transition-all">
                   <Bell size={18} />
                   {unreadCount > 0 && (
                     <span className="absolute top-1 right-1 min-w-[15px] h-[15px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-0.5 leading-none">
@@ -126,7 +126,7 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-                <Link href="/dashboard" className="p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-all">
+                <Link href="/dashboard" className="p-2 rounded-lg text-slate-500 hover:text-[#30337A] hover:bg-[#6C78DF]/10 transition-all">
                   <User size={18} />
                 </Link>
                 <button
@@ -139,12 +139,12 @@ export default function Navbar() {
             ) : (
               <div className="flex items-center gap-2 ml-2 pl-2 border-l border-slate-200">
                 <Link href="/login">
-                  <button className="text-sm font-medium text-slate-600 hover:text-blue-600 px-3 py-2 rounded-lg transition-all">
+                  <button className="text-sm font-medium text-slate-600 hover:text-[#30337A] px-3 py-2 rounded-lg transition-all">
                     Sign in
                   </button>
                 </Link>
                 <Link href="/register">
-                  <button className="text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all shadow-sm">
+                  <button className="text-sm font-semibold bg-[#6C78DF] hover:bg-[#5A64D4] text-white px-4 py-2 rounded-lg transition-all shadow-sm">
                     Join Free
                   </button>
                 </Link>
@@ -193,7 +193,7 @@ export default function Navbar() {
               key={l.href}
               href={l.href}
               onClick={() => setMenuOpen(false)}
-              className="flex items-center py-2.5 px-3 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+              className="flex items-center py-2.5 px-3 text-sm font-medium text-slate-700 hover:text-[#30337A] hover:bg-[#6C78DF]/10 rounded-xl transition-all"
             >
               {l.label}
             </Link>
@@ -201,14 +201,14 @@ export default function Navbar() {
           <Link
             href="/for-business"
             onClick={() => setMenuOpen(false)}
-            className="flex items-center py-2.5 px-3 text-sm font-semibold text-blue-700 hover:bg-blue-50 rounded-xl transition-all"
+            className="flex items-center py-2.5 px-3 text-sm font-semibold text-[#30337A] hover:bg-[#6C78DF]/10 rounded-xl transition-all"
           >
             For Business
           </Link>
           <Link
             href="/partner"
             onClick={() => setMenuOpen(false)}
-            className="flex items-center py-2.5 px-3 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+            className="flex items-center py-2.5 px-3 text-sm font-medium text-slate-700 hover:text-[#30337A] hover:bg-[#6C78DF]/10 rounded-xl transition-all"
           >
             Become a Partner
           </Link>
@@ -225,7 +225,7 @@ export default function Navbar() {
                   key={l.href}
                   href={l.href}
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center py-2.5 px-3 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                  className="flex items-center py-2.5 px-3 text-sm font-medium text-slate-700 hover:text-[#30337A] hover:bg-[#6C78DF]/10 rounded-xl transition-all"
                 >
                   {l.label}
                 </Link>
@@ -240,12 +240,12 @@ export default function Navbar() {
           ) : (
             <div className="flex gap-2 pt-3 mt-1 border-t border-slate-100">
               <Link href="/login" onClick={() => setMenuOpen(false)} className="flex-1">
-                <button className="w-full py-2.5 text-sm font-medium border border-slate-200 rounded-xl hover:border-blue-300 transition-all">
+                <button className="w-full py-2.5 text-sm font-medium border border-slate-200 rounded-xl hover:border-[#6C78DF] transition-all">
                   Sign In
                 </button>
               </Link>
               <Link href="/register" onClick={() => setMenuOpen(false)} className="flex-1">
-                <button className="w-full py-2.5 text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all">
+                <button className="w-full py-2.5 text-sm font-semibold bg-[#6C78DF] hover:bg-[#5A64D4] text-white rounded-xl transition-all">
                   Join Free
                 </button>
               </Link>

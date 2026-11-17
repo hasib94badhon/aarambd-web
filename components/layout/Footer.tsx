@@ -39,11 +39,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+              <div className="w-8 h-8 bg-[#6C78DF] rounded-lg flex items-center justify-center shadow-sm">
                 <span className="text-white font-extrabold text-sm leading-none">A</span>
               </div>
               <span className="text-white text-xl font-extrabold tracking-tight">
-                Aaram<span className="text-blue-400">BD</span>
+                Aaram<span className="text-[#A5ACEB]">BD</span>
               </span>
             </div>
             <p className="text-sm leading-relaxed mb-5">
@@ -52,11 +52,11 @@ export default function Footer() {
             </p>
             <div className="space-y-2 text-xs">
               <div className="flex items-center gap-2">
-                <MapPin size={12} className="text-blue-400 flex-shrink-0" />
+                <MapPin size={12} className="text-[#A5ACEB] flex-shrink-0" />
                 <span>Serving all 64 districts of Bangladesh</span>
               </div>
               <div className="flex items-center gap-2">
-                <Globe size={12} className="text-blue-400 flex-shrink-0" />
+                <Globe size={12} className="text-[#A5ACEB] flex-shrink-0" />
                 <span>aarambd.com</span>
               </div>
             </div>
@@ -73,7 +73,7 @@ export default function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="hover:text-blue-400 transition-colors"
+                      className="hover:text-[#A5ACEB] transition-colors"
                     >
                       {l.label}
                     </Link>
@@ -87,8 +87,8 @@ export default function Footer() {
         <div className="border-t border-slate-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} AaramBD. All rights reserved.</p>
           <div className="flex items-center gap-5">
-            <Link href="/terms"   className="hover:text-blue-400 transition-colors">Terms</Link>
-            <Link href="/privacy" className="hover:text-blue-400 transition-colors">Privacy</Link>
+            <Link href="/terms"   className="hover:text-[#A5ACEB] transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-[#A5ACEB] transition-colors">Privacy</Link>
           </div>
           <p>Made with ❤️ for Bangladesh</p>
         </div>

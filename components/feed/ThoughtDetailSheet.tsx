@@ -191,13 +191,13 @@ export default function ThoughtDetailSheet({
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Write a comment…"
-                className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6C78DF]/40"
               />
               <Button
                 type="submit"
                 size="sm"
                 disabled={!commentText.trim() || submitting}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3"
+                className="bg-[#6C78DF] hover:bg-[#5A64D4] text-white px-3"
               >
                 {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
               </Button>

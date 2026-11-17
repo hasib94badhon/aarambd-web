@@ -168,13 +168,13 @@ export default function PostDetailSheet({ post, open, onClose }: Props) {
             <SheetHeader className="text-left p-0 space-y-0">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <User size={16} className="text-blue-600" />
+                  <User size={16} className="text-[#6C78DF]" />
                 </div>
                 <div>
                   <Link
                     href={`/profile/${post.user_id}`}
                     onClick={onClose}
-                    className="font-bold text-gray-900 hover:text-blue-600 transition text-sm"
+                    className="font-bold text-gray-900 hover:text-[#6C78DF] transition text-sm"
                   >
                     {post.name}
                   </Link>
@@ -252,19 +252,19 @@ export default function PostDetailSheet({ post, open, onClose }: Props) {
           <div className="flex-shrink-0 border-t border-gray-100 bg-white px-4 py-3">
             <form onSubmit={handleSubmitComment} className="flex gap-2 items-center">
               <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                <User size={14} className="text-blue-600" />
+                <User size={14} className="text-[#6C78DF]" />
               </div>
               <input
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Write a comment…"
-                className="flex-1 text-sm bg-gray-100 rounded-full px-4 py-2 outline-none focus:ring-2 focus:ring-blue-300 transition"
+                className="flex-1 text-sm bg-gray-100 rounded-full px-4 py-2 outline-none focus:ring-2 focus:ring-[#6C78DF]/40 transition"
                 disabled={submitting}
               />
               <button
                 type="submit"
                 disabled={!commentText.trim() || submitting}
-                className="w-8 h-8 rounded-full bg-blue-600 disabled:bg-gray-200 text-white flex items-center justify-center transition flex-shrink-0"
+                className="w-8 h-8 rounded-full bg-[#6C78DF] disabled:bg-gray-200 text-white flex items-center justify-center transition flex-shrink-0"
               >
                 <Send size={14} />
               </button>
@@ -274,7 +274,7 @@ export default function PostDetailSheet({ post, open, onClose }: Props) {
 
         {!user && (
           <div className="flex-shrink-0 border-t border-gray-100 bg-gray-50 px-4 py-3 text-center text-xs text-gray-400">
-            <Link href="/login" onClick={onClose} className="text-blue-600 font-medium hover:underline">
+            <Link href="/login" onClick={onClose} className="text-[#6C78DF] font-medium hover:underline">
               Login
             </Link>{" "}
             to leave a comment

@@ -63,7 +63,7 @@ export default function AboutPage() {
       {data.goals && (
         <section className="mb-10 bg-green-50 rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-3">
-            <Target size={18} className="text-blue-600" />
+            <Target size={18} className="text-[#6C78DF]" />
             <h2 className="text-lg font-bold text-gray-900">Our Goals</h2>
           </div>
           <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{data.goals}</p>
@@ -94,13 +94,13 @@ export default function AboutPage() {
         <div className="space-y-3">
           {data.office_address && (
             <div className="flex items-start gap-3 text-sm text-gray-600">
-              <MapPin size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
+              <MapPin size={16} className="text-[#6C78DF] mt-0.5 flex-shrink-0" />
               <span>{data.office_address}</span>
             </div>
           )}
           {data.contact && (
             <div className="flex items-center gap-3 text-sm text-gray-600">
-              <Phone size={16} className="text-blue-500 flex-shrink-0" />
+              <Phone size={16} className="text-[#6C78DF] flex-shrink-0" />
               <span>{data.contact}</span>
             </div>
           )}

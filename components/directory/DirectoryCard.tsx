@@ -33,11 +33,11 @@ export default function DirectoryCard({ user }: { user: DirectoryUser }) {
     <Link href={href}>
       <div className="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
         {/* Top accent bar */}
-        <div className={`h-1 w-full ${isPaid ? "bg-gradient-to-r from-yellow-400 to-amber-300" : "bg-gradient-to-r from-blue-500 to-indigo-500"}`} />
+        <div className={`h-1 w-full ${isPaid ? "bg-gradient-to-r from-yellow-400 to-amber-300" : "bg-gradient-to-r from-[#6C78DF] to-[#30337A]"}`} />
 
         <div className="p-4 flex gap-4">
           {/* Avatar */}
-          <div className="w-14 h-14 rounded-xl overflow-hidden bg-blue-50 flex-shrink-0 flex items-center justify-center border border-gray-100">
+          <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#6C78DF]/10 flex-shrink-0 flex items-center justify-center border border-gray-100">
             {user.photo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
@@ -50,7 +50,7 @@ export default function DirectoryCard({ user }: { user: DirectoryUser }) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="font-bold text-gray-900 text-sm group-hover:text-blue-600 transition truncate leading-tight">
+                <h3 className="font-bold text-gray-900 text-sm group-hover:text-[#6C78DF] transition truncate leading-tight">
                   {user.name}
                 </h3>
                 <div className="flex items-center gap-1.5 mt-1 flex-wrap">
@@ -66,14 +66,14 @@ export default function DirectoryCard({ user }: { user: DirectoryUser }) {
                   )}
                   {user.is_service != null && (
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium leading-none ${
-                      user.is_service ? "bg-blue-50 text-blue-600" : "bg-orange-50 text-orange-600"
+                      user.is_service ? "bg-[#6C78DF]/10 text-[#30337A]" : "bg-orange-50 text-orange-600"
                     }`}>
                       {user.is_service ? "Service" : "Shop"}
                     </span>
                   )}
                 </div>
               </div>
-              <span className="text-gray-300 group-hover:text-blue-500 transition text-sm flex-shrink-0 mt-0.5">›</span>
+              <span className="text-gray-300 group-hover:text-[#6C78DF] transition text-sm flex-shrink-0 mt-0.5">›</span>
             </div>
 
             {user.location && (
